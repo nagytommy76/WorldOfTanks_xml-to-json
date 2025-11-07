@@ -5,6 +5,7 @@ import { ISpeedLimit, ICamo } from '@Types/Modules'
 import { toStringArray, toNumber, toNumberArray } from '@Utils/xmlHelper'
 
 import { ReturnHull } from '@VehicleParts/Hull/HullArmor'
+import { ReturnChassis } from '@VehicleParts/Chassis/ReturnChassis'
 
 const parser = new XMLParser({
    ignoreAttributes: false,
@@ -57,6 +58,7 @@ function ReturnCamoValues(rawJSON: any) {
 GetCrewData(convertedRawJSON[fileName])
 ReturnSpeedLimits(convertedRawJSON[fileName])
 ReturnCamoValues(convertedRawJSON[fileName])
-console.log(ReturnHull(convertedRawJSON[fileName]))
+ReturnHull(convertedRawJSON[fileName])
+console.log(ReturnChassis(convertedRawJSON[fileName]))
 
 console.log('RAN')
