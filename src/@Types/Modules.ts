@@ -6,16 +6,17 @@ export interface ICamo {
 }
 
 export interface IChassis {
+   price: number
    armor: number
    dispersion: {
       vehicleMovement: number
       vehicleRotation: number
    }
-   hullPosition: number[]
+   // hullPosition: number[]
    id: string
    level: number
    maxHealth: number
-   maxLoad: number
+   // maxLoad: number
    maxRegenHealth: number
    name: string
    repairTime: number
@@ -23,7 +24,7 @@ export interface IChassis {
    rotationSpeed: number
    terrainResistance: number[]
    weight: number
-   wheelAngle: null
+   // wheelAngle: null
    wheeled: boolean
 }
 
