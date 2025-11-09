@@ -1,4 +1,4 @@
-import { toStringArray, toNumber, toNumberArray } from '@Utils/xmlHelper'
+import { toStringArray, toNumber } from '@Utils/xmlHelper'
 import { IHull } from '@Types/Modules'
 
 export function ReturnHull(rawJSON: any) {
