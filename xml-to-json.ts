@@ -1,24 +1,18 @@
 import fs from 'fs'
 import path from 'path'
-import { XMLParser } from 'fast-xml-parser'
 import { ISpeedLimit, ICamo } from '@Types/Modules'
 import { toStringArray, toNumber, toNumberArray } from '@Utils/xmlHelper'
+import xmlParser from '@Utils/xmlParser'
 
 import { ReturnHull } from '@VehicleParts/Hull/HullArmor'
 import { ReturnChassis } from '@VehicleParts/Chassis/ReturnChassis'
+import ReturnTurrets from '@VehicleParts/Turrets/Turrets'
 
-const parser = new XMLParser({
-   ignoreAttributes: false,
-   allowBooleanAttributes: true,
-   attributeNamePrefix: '@_',
-   trimValues: true,
-   parseTagValue: false,
-})
-
-const filePath = path.join('./XML/A182_T803.xml')
+// const filePath = path.join('./XML/A182_T803.xml')
+const filePath = path.join('./XML/R19_IS-3.xml')
 // const manticoreFilePath = path.join('./XML/GB100_Manticore.xml')
 const xmlString = fs.readFileSync(filePath, 'utf-8')
-const convertedRawJSON = parser.parse(xmlString)
+const convertedRawJSON = xmlParser.parse(xmlString)
 
 const fileName = path.basename(filePath)
 
@@ -59,6 +53,7 @@ GetCrewData(convertedRawJSON[fileName])
 ReturnSpeedLimits(convertedRawJSON[fileName])
 ReturnCamoValues(convertedRawJSON[fileName])
 ReturnHull(convertedRawJSON[fileName])
-console.log(ReturnChassis(convertedRawJSON[fileName]))
+ReturnChassis(convertedRawJSON[fileName])
+ReturnTurrets(convertedRawJSON[fileName])
 
 console.log('RAN')
