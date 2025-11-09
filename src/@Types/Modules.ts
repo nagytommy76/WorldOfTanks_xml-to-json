@@ -103,14 +103,15 @@ export type AmmoType =
 
 export interface ITurrets {
    armor: number[]
-   gunPosition: number[]
+   price: number
+   // gunPosition: number[]
    guns: IGuns[]
    hp: number
    id: string
    level: number
    name: string
-   openTop: boolean
-   pitch: null
+   // openTop: boolean
+   // pitch: null
    ringHealth: {
       maxHealth: number
       maxRegenHealth: number
@@ -129,7 +130,7 @@ export interface ITurrets {
 export interface IGuns {
    accuracy: number
    aimTime: number
-   arc: null
+   arc: number[]
    autoreload: null
    burst: null
    clip: null
@@ -144,9 +145,9 @@ export interface IGuns {
    elevation: number
    elevationLimits: {
       elevation: number[]
-      // Add other elevation limits properties as needed
+      depression: number[]
    }
-   gunArc: null
+   gunArc: number[]
    id: string
    level: number
    maxAmmo: number
