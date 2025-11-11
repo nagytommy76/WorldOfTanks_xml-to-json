@@ -1,21 +1,16 @@
-import fs from 'fs'
-import path from 'path'
-import xmlParser from '@Utils/xmlParser'
 import { toNumber, toStringArray } from '@Utils/xmlHelper'
 
 import { IRadios } from '@Types/Modules'
 
-const radioFilePath = path.join('./XML/components/radios.xml')
-const xmlRadiosString = fs.readFileSync(radioFilePath, 'utf-8')
+import convertedJSON from '@Utils/convertedJson'
 
-const convertedFuelTanksJSON = xmlParser.parse(xmlRadiosString)
-const fileName = path.basename(radioFilePath)
+export default function ReturnRadios(rawJSON: any, nationDir: string): IRadios[] {
+   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'radios')
 
-export default function ReturnRadios(rawJSON: any): IRadios[] {
    const radiosData: IRadios[] = []
    const vehicleRadios = rawJSON.radios
-   if (convertedFuelTanksJSON[fileName] && vehicleRadios) {
-      const sharedRadios = convertedFuelTanksJSON[fileName].shared
+   if (convertedComponentJSON[fileName] && vehicleRadios) {
+      const sharedRadios = convertedComponentJSON[fileName].shared
       const radioTypes = Object.keys(vehicleRadios)[0] || []
       const radioData = sharedRadios[radioTypes as string]
 
@@ -31,7 +26,6 @@ export default function ReturnRadios(rawJSON: any): IRadios[] {
          userString: radioData.userString,
          weight: toNumber(radioData.weight) || 0,
       })
-      console.log(radiosData)
    }
 
    return radiosData

@@ -1,20 +1,41 @@
-import fs from 'fs'
-import path from 'path'
-import xmlParser from '@Utils/xmlParser'
-import { toNumber, toNumberArray, toStringArray } from '@Utils/xmlHelper'
+import { toNumber, toNumberArray } from '@Utils/xmlHelper'
+import convertedJSON from '@Utils/convertedJson'
 
-import { IGuns } from '@Types/Modules'
+import { IGuns, IShells } from '@Types/Modules'
 
-const filePath = path.join('./XML/components/guns.xml')
-const xmlString = fs.readFileSync(filePath, 'utf-8')
+import ReturnShells from './Shells'
 
-const convertedGunJSON = xmlParser.parse(xmlString)
-
-export default function ReturnGuns(gun: any): IGuns[] {
+export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
+   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'guns')
    const gunsData: IGuns[] = []
    for (const [key, value] of Object.entries(gun as Record<string, any>)) {
-      if (value['#text'] === 'shared' && convertedGunJSON) {
-         console.log(value['#text'])
+      const restGunData: { level: number; maxAmmo: number; weight: number; shells: IShells[] } = {
+         level: 0,
+         maxAmmo: 0,
+         weight: 0,
+         shells: [],
+      }
+      if (value['#text'] === 'shared' && convertedComponentJSON) {
+         const sharedGun = convertedComponentJSON[fileName]
+         for (const [gunName, guns] of Object.entries(sharedGun.shared as Record<string, any>)) {
+            if (key === gunName) {
+               restGunData['level'] = toNumber(guns.level) || 0
+               restGunData['maxAmmo'] = toNumber(guns.maxAmmo) || 0
+               restGunData['weight'] = toNumber(guns.weight) || 0
+
+               for (const shellNames of Object.keys(guns.shots)) {
+                  const shells = ReturnShells(shellNames, nationDir)
+                  restGunData['shells'].push({
+                     ...shells,
+                     defaultPortion: toNumber(guns.shots[shellNames].defaultPortion) || 0,
+                     speed: toNumber(guns.shots[shellNames].speed) || 0,
+                     gravity: toNumber(guns.shots[shellNames].gravity) || 0,
+                     maxDistance: toNumber(guns.shots[shellNames].maxDistance) || 0,
+                     piercingPower: toNumberArray(guns.shots[shellNames].piercingPower || []),
+                  })
+               }
+            }
+         }
       }
       gunsData.push({
          accuracy: toNumber(value.shotDispersionRadius) || 0,
@@ -40,12 +61,9 @@ export default function ReturnGuns(gun: any): IGuns[] {
          id: key,
          name: key,
          reloadTime: toNumber(value.reloadTime) || 0,
-         shells: [], // Needs to be implemented
          twinGun: null,
          //   From guns.xml file
-         level: 0,
-         maxAmmo: 0,
-         weight: 0,
+         ...restGunData,
       })
    }
    return gunsData

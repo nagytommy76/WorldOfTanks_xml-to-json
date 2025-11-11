@@ -12,17 +12,16 @@ function returnMainArmor(primaryArmor: string, armorArray: { [key: string]: stri
    return toNumberArray(primaryArmorValues)
 }
 
-export default function ReturnTurrets(rawJSON: any): ITurrets[] {
+export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets[] {
    const turretData: ITurrets[] = []
    if (rawJSON?.turrets0) {
       for (const [key, value] of Object.entries(rawJSON.turrets0 as Record<string, any>)) {
-         const guns = ReturnGuns(value.guns || [])
-         console.log(guns[0])
+         const guns = ReturnGuns(value.guns || [], nationDir)
          const primaryArmorValues = returnMainArmor(value.primaryArmor as string, value.armor)
          const chassisHealth = toNumber(rawJSON.hull.maxHealth) || 0
          const turretHealt = toNumber(value.maxHealth) || 0
          const vehicleMaxHealtWithTurret = chassisHealth + turretHealt
-         // console.log(key)
+
          turretData.push({
             id: key,
             name: key,

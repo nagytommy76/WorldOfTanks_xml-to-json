@@ -1,21 +1,14 @@
-import fs from 'fs'
-import path from 'path'
-import xmlParser from '@Utils/xmlParser'
 import { toNumber, toStringArray } from '@Utils/xmlHelper'
+import convertedJSON from '@Utils/convertedJson'
 
 import { IFuelTank } from '@Types/Modules'
 
-const fuelTanksFilePath = path.join('./XML/components/fuelTanks.xml')
-const xmlFuelTanksString = fs.readFileSync(fuelTanksFilePath, 'utf-8')
-
-const convertedFuelTanksJSON = xmlParser.parse(xmlFuelTanksString)
-const fileName = path.basename(fuelTanksFilePath)
-
-export default function ReturnFuelTanks(rawJson: any): IFuelTank {
+export default function ReturnFuelTanks(rawJson: any, nationDir: string): IFuelTank {
+   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'fuelTanks')
    const fuelTank: IFuelTank = {} as IFuelTank
    const vehicleFuelTanks = rawJson.fuelTanks
-   if (convertedFuelTanksJSON[fileName] && vehicleFuelTanks) {
-      const sharedFuelTanks = convertedFuelTanksJSON[fileName].shared
+   if (convertedComponentJSON[fileName] && vehicleFuelTanks) {
+      const sharedFuelTanks = convertedComponentJSON[fileName].shared
       const fuelTankType = Object.keys(vehicleFuelTanks)[0] || []
       const fuelTankData = sharedFuelTanks[fuelTankType as string]
       fuelTank.maxHealth = toNumber(fuelTankData.maxHealth) || 0

@@ -1,21 +1,15 @@
-import fs from 'fs'
-import path from 'path'
-import xmlParser from '@Utils/xmlParser'
 import { toNumber, toStringArray } from '@Utils/xmlHelper'
+import convertedJSON from '@Utils/convertedJson'
 
 import { IEngines } from '@Types/Modules'
 
-const enginesFilePath = path.join('./XML/components/engines.xml')
-const xmlEnginesString = fs.readFileSync(enginesFilePath, 'utf-8')
+export default function ReturnEngines(rawJson: any, nationDir: string): IEngines[] {
+   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'engines')
 
-const convertedEnginesJSON = xmlParser.parse(xmlEnginesString)
-const fileName = path.basename(enginesFilePath)
-
-export default function ReturnEngines(rawJson: any): IEngines[] {
    const enginesArray: IEngines[] = []
    const vehicleEngines = rawJson.engines
-   if (convertedEnginesJSON[fileName] && vehicleEngines) {
-      const sharedEngines = convertedEnginesJSON[fileName].shared
+   if (convertedComponentJSON[fileName] && vehicleEngines) {
+      const sharedEngines = convertedComponentJSON[fileName].shared
       for (const engineName of Object.keys(vehicleEngines)) {
          const engine = sharedEngines[engineName] as IEngines
          enginesArray.push({
