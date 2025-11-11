@@ -40,7 +40,6 @@ export interface IEngines {
    repairCost: number
    rpm_max: number
    rpm_min: number
-   shortUserString: string
    tags: string[]
    userString: string
    weight: number
@@ -141,7 +140,7 @@ export interface IGuns {
       whileDamaged: number
    }
    dualAccuracy: null
-   dualGun: null
+   dualGun: IDualGun | null
    elevation: number
    elevationLimits: {
       elevation: number[]
@@ -154,8 +153,22 @@ export interface IGuns {
    name: string
    reloadTime: number
    shells: IShells[] // Not sure what type this should be, so leaving as any
-   twinGun: null
+   twinGun: null | {
+      afterShotDelay: number
+      twinGunReloadTime: number
+   }
    weight: number
+}
+
+export interface IDualGun {
+   afterShotDelay: number
+   chargeThreshold: number
+   chargeTime: number
+   preChargeIndication: number
+   rateTime: number
+   reloadLockTime: number
+   reloadTimes: number[]
+   shootImpulse: number
 }
 export interface IShells {
    caliber: number
@@ -173,7 +186,7 @@ export interface IShells {
    kind: AmmoType
    maxDistance: number
    name: string
-   normalizationAngle: number
+   normalizationAngle?: number
    piercingPower: number[]
    price: number
    ricochetAngle: number
@@ -204,11 +217,8 @@ export interface ITankData {
       fuelTank: IFuelTank
       hull: IHull
       radios: IRadios[]
-      speedLimit: {
-         forward: number
-         backward: number
-      }
-      turretPosition: number[]
+      speedLimit: ISpeedLimit
+      // turretPosition: number[]
       turrets: ITurrets[]
    }
    tags: string[]
