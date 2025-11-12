@@ -20,20 +20,22 @@ const notToIncludeFileNames = [
    'LE',
    'CO',
    'CFE',
+   'Pillbox',
+   'Bomber',
 ]
 
 const fileNameStartsWithByNations = {
-   germany: 'G',
-   ussr: 'R',
-   usa: 'A',
-   france: 'F',
-   uk: 'GB',
-   china: 'Ch',
-   japan: 'J',
-   czech: 'Cz',
-   poland: 'Pl',
+   // germany: 'G',
+   // ussr: 'R',
+   // usa: 'A',
+   // france: 'F',
+   // uk: 'GB',
+   // china: 'Ch',
+   // japan: 'J',
+   // czech: 'Cz',
+   // poland: 'Pl',
    sweden: 'S',
-   italy: 'It',
+   // italy: 'It',
 }
 
 // folder with all vehicle xmls
@@ -46,6 +48,7 @@ if (!fs.existsSync(outputDir)) {
 }
 
 for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNations)) {
+   // example: XML/germany
    const nationDir = path.join(xmlDir, nation)
    //    Create a nation folder for JSON output
    const outNationDir = path.join(outputDir, nation)
@@ -83,12 +86,12 @@ for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNa
       const parts = baseName.split('_') // ["R19", "IS-3"]
       const shortName = parts.slice(1).join('_') || parts[0] // "IS-3"
 
-      // const vehicle = ReturnSingleVehicle(convertedRawJSON, fileName, shortName, 'ussr')
+      const vehicle = ReturnSingleVehicle(convertedRawJSON, fileName, shortName, nation, nationDir)
 
-      // fs.writeFileSync(`${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
-      // console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
+      fs.writeFileSync(`${outNationDir}/${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
+      console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
 
-      console.log(parts)
+      // console.log(parts)
    }
 }
 
