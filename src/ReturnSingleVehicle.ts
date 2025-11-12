@@ -10,6 +10,7 @@ import ReturnEngines from '@VehicleParts/Other/Engines'
 import ReturnFuelTanks from '@VehicleParts/Other/FuelTank'
 import ReturnRadios from '@VehicleParts/Other/Radio'
 import ReturnOtherData from '@VehicleParts/Other/OtherData'
+import ReturnSiegeMode from '@VehicleParts/Other/SiegeMode'
 
 export default function ReturnSingleVehicle(
    convertedRawJSON: any,
@@ -29,7 +30,9 @@ export default function ReturnSingleVehicle(
    const fuelTank = ReturnFuelTanks(convertedRawJSON[fileName], nationDir)
    const radios = ReturnRadios(convertedRawJSON[fileName], nationDir)
 
+   const { hydropneumatic, siegeMode } = ReturnSiegeMode(convertedRawJSON[fileName])
    const otherData = ReturnOtherData(convertedRawJSON[fileName])
+
    const Vehicle: ITankData = {
       ...otherData,
    } as ITankData
@@ -43,6 +46,12 @@ export default function ReturnSingleVehicle(
       radios: radios,
       speedLimit: speedLimits,
       turrets: turretsData,
+   }
+   if (hydropneumatic) {
+      Vehicle.stats.hydropneumatic = hydropneumatic
+   }
+   if (siegeMode) {
+      Vehicle.stats.siegeMode = siegeMode
    }
    Vehicle.name = shortName
    Vehicle.nation = nation
