@@ -5,6 +5,16 @@ export interface ICamo {
    stationary: number
 }
 
+export interface ISiegeMode {
+   switchOffTime: number
+   switchOnTime: number
+}
+
+export interface IHydropneumatic {
+   depression: number
+   elevation: number
+}
+
 export interface IChassis {
    price: number
    armor: number
@@ -130,9 +140,19 @@ export interface IGuns {
    accuracy: number
    aimTime: number
    arc: number[]
-   autoreload: null
-   burst: null
-   clip: null
+   burst: {
+      // BlackRock T11 USA
+      count: number
+      rate: number
+      syncReloading: boolean
+   } | null
+   autoreload: {
+      reloadTime: number[]
+   } | null
+   clip: {
+      count: number
+      rate: number
+   } | null
    depression: number
    dispersion: {
       turretRotation: number
@@ -218,8 +238,9 @@ export interface ITankData {
       hull: IHull
       radios: IRadios[]
       speedLimit: ISpeedLimit
-      // turretPosition: number[]
       turrets: ITurrets[]
+      hydropneumatic?: IHydropneumatic | null
+      siegeMode?: ISiegeMode | null
    }
    tags: string[]
    tier: number
