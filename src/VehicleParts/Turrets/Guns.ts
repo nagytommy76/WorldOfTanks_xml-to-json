@@ -15,6 +15,27 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          weight: 0,
          shells: [],
       }
+      const count = toNumber(value.clip?.count)
+      const rate = toNumber(value.clip?.rate)
+      let clip = null
+      if (count !== undefined && rate !== undefined) {
+         clip = { count: count, rate: rate }
+      }
+
+      const burstCount = toNumber(value.burst?.count)
+      const burstRate = toNumber(value.burst?.rate)
+      const burstSyncReloading = value.burst?.syncReloading === 'true' ? true : false
+      let burst = null
+      if (burstCount !== undefined && burstRate !== undefined) {
+         burst = {
+            count: burstCount,
+            rate: burstRate,
+            syncReloading: burstSyncReloading,
+         }
+      }
+
+      const autoreload = { reloadTime: toNumberArray(value.autoreload?.reloadTime) }
+
       if (value['#text'] === 'shared' && convertedComponentJSON) {
          const sharedGun = convertedComponentJSON[fileName]
          for (const [gunName, guns] of Object.entries(sharedGun.shared as Record<string, any>)) {
@@ -41,9 +62,9 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          accuracy: toNumber(value.shotDispersionRadius) || 0,
          aimTime: toNumber(value.aimingTime) || 0,
          arc: toNumberArray(value.turretYawLimits || []),
-         autoreload: null,
-         burst: null,
-         clip: null,
+         autoreload: autoreload.reloadTime.length > 0 ? autoreload : null,
+         burst,
+         clip,
          depression: toNumber(value.depressionAngle) || 0,
          dispersion: {
             afterShot: toNumber(value.shotDispersionFactors?.afterShot) || 0,
