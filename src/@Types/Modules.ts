@@ -144,7 +144,7 @@ export interface IGuns {
       // BlackRock T11 USA
       count: number
       rate: number
-      syncReloading: boolean
+      syncReloading?: boolean
    } | null
    autoreload: {
       reloadTime: number[]
