@@ -190,28 +190,42 @@ export interface IDualGun {
    reloadTimes: number[]
    shootImpulse: number
 }
-export interface IShells {
-   caliber: number
+
+export interface ISharedShell {
    damage: {
       armor: number
       devices: number
    }
-   defaultPortion: number
+   caliber: number
    effects: string
-   gravity: number
    icon: string
    id: number
-   image: AmmoType
-   isTracer: boolean
+   isTracer?: boolean
    kind: AmmoType
-   maxDistance: number
-   name: string
    normalizationAngle?: number
-   piercingPower: number[]
    price: number
    ricochetAngle: number
-   speed: number
    userString: string
+   armorSpalls: {
+      impactRadius: number
+      coneAngle: number
+      damage: {
+         armor: number
+         devices: number
+      }
+   } | null
+   explosionRadius: number | null
+   mechanics: string | null
+}
+
+export interface IShells extends ISharedShell {
+   defaultPortion: number
+   gravity: number
+   id: number
+   maxDistance: number
+   name: string
+   piercingPower: number[]
+   speed: number
 }
 
 export interface ITankData {
