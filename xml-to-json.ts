@@ -84,23 +84,11 @@ for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNa
 
       const baseName = path.basename(fileName, '.xml') // "R19_IS-3"
       const parts = baseName.split('_') // ["R19", "IS-3"]
-      const shortName = parts.slice(1).join('_') || parts[0] // "IS-3"
+      const shortName = parts.slice(1).join(' ') || parts[0] // "IS-3"
 
       const vehicle = ReturnSingleVehicle(convertedRawJSON, fileName, shortName, nation, nationDir)
 
       fs.writeFileSync(`${outNationDir}/${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
       console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
-
-      // console.log(parts)
    }
 }
-
-// const filePath = path.join('./XML/R19_IS-3.xml')
-// const xmlString = fs.readFileSync(filePath, 'utf-8')
-// const convertedRawJSON = xmlParser.parse(xmlString)
-
-// const fileName = path.basename(filePath)
-
-// const baseName = path.basename(fileName, '.xml') // "R19_IS-3"
-// const parts = baseName.split('_') // ["R19", "IS-3"]
-// const shortName = parts.slice(1).join('_') || parts[0] // "IS-3"
