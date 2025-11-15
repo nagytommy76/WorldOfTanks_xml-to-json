@@ -31,12 +31,13 @@ export default function ReturnSingleVehicle(
    const radios = ReturnRadios(convertedRawJSON[fileName], nationDir)
 
    const { hydropneumatic, siegeMode } = ReturnSiegeMode(convertedRawJSON[fileName])
-   const otherData = ReturnOtherData(convertedRawJSON[fileName])
+   const otherData = ReturnOtherData(fileName, nation)
 
    const Vehicle: ITankData = {
       ...otherData,
    } as ITankData
 
+   Vehicle.crew = crew
    Vehicle.stats = {
       camo: camo,
       chassis: chassisData,
@@ -53,9 +54,5 @@ export default function ReturnSingleVehicle(
    if (siegeMode) {
       Vehicle.stats.siegeMode = siegeMode
    }
-   Vehicle.name = shortName
-   Vehicle.nation = nation
-   Vehicle.crew = crew
-
    return Vehicle
 }
