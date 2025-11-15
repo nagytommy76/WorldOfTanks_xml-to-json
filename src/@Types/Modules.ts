@@ -229,16 +229,21 @@ export interface IShells extends ISharedShell {
 }
 
 export interface ITankData {
+   id: number
+   name: string
+   nation: string
+   price: number | { '#text': string; gold: number }
+   role: string
+   shortName: string
+   tags: string[]
+   tier: number
+   type: string
+   xmlId: string
+   notInShop: boolean
    crew: {
       primary: string
       secondary: string[]
    }[]
-   id: number
-   name: string
-   nation: string
-   price: number
-   role: string
-   shortName: string
    stats: {
       camo: {
          moving: number
@@ -256,8 +261,4 @@ export interface ITankData {
       hydropneumatic?: IHydropneumatic | null
       siegeMode?: ISiegeMode | null
    }
-   tags: string[]
-   tier: number
-   type: string
-   xmlId: string
 }
