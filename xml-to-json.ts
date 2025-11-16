@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import xmlParser from '@Utils/xmlParser'
+import fetchMetaData from '@Utils/fetchMetaData'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
 
@@ -47,48 +48,70 @@ if (!fs.existsSync(outputDir)) {
    fs.mkdirSync(outputDir, { recursive: true })
 }
 
-for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNations)) {
-   // example: XML/germany
-   const nationDir = path.join(xmlDir, nation)
-   //    Create a nation folder for JSON output
-   const outNationDir = path.join(outputDir, nation)
-   if (!fs.existsSync(outNationDir)) {
-      fs.mkdirSync(outNationDir, { recursive: true })
-   }
+async function Main() {
+   for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNations)) {
+      const fetchedJSONByNation = await fetchMetaData(nation)
+      // example: XML/germany
+      const nationDir = path.join(xmlDir, nation)
+      //    Create a nation folder for JSON output
+      const outNationDir = path.join(outputDir, nation)
+      if (!fs.existsSync(outNationDir)) {
+         fs.mkdirSync(outNationDir, { recursive: true })
+      }
+      // const xmlFile = fs.readFileSync('./XML/ussr/R19_IS-3.xml', 'utf8')
 
-   const nationXmlFiles = fs
-      .readdirSync(nationDir)
-      .filter((file) => file.toLowerCase().endsWith('.xml'))
-      //   Include all of the nation's vehicles / not list.xml for example
-      .filter((file) => {
-         return file.startsWith(fileNameStartsWith)
-      })
-      // exclude training / special mode vehicles
-      .filter((file) => {
-         const base = path.basename(file, '.xml')
-         const lower = base.toLowerCase()
-         return !notToIncludeFileNames.some((bad) => lower.includes(bad.toLowerCase()))
-      })
+      const nationXmlFiles = fs
+         .readdirSync(nationDir)
+         .filter((file) => file.toLowerCase().endsWith('.xml'))
+         //   Include all of the nation's vehicles / not list.xml for example
+         .filter((file) => {
+            return file.startsWith(fileNameStartsWith)
+         })
+         // exclude training / special mode vehicles
+         .filter((file) => {
+            const base = path.basename(file, '.xml')
+            const lower = base.toLowerCase()
+            return !notToIncludeFileNames.some((bad) => lower.includes(bad.toLowerCase()))
+         })
 
-   if (nationXmlFiles.length === 0) {
-      console.log('No XML files found in', nationDir)
-      process.exit(0)
-   }
+      if (nationXmlFiles.length === 0) {
+         console.log('No XML files found in', nationDir)
+         process.exit(0)
+      }
 
-   for (const file of nationXmlFiles) {
-      const filePath = path.join(nationDir, file)
-      const xmlString = fs.readFileSync(filePath, 'utf-8')
-      const convertedRawJSON = xmlParser.parse(xmlString)
+      for (const file of nationXmlFiles) {
+         const filePath = path.join(nationDir, file)
+         const xmlString = fs.readFileSync(filePath, 'utf-8')
+         const fileName = path.basename(filePath)
+         // const filePath = path.join(nationDir, xmlFile)
+         // const xmlString = fs.readFileSync(filePath, 'utf-8')
+         const convertedRawJSON = xmlParser.parse(xmlString)
+         // const fileName = path.basename('./XML/ussr/R19_IS-3.xml')
 
-      const fileName = path.basename(filePath)
+         const baseName = path.basename(fileName, '.xml') // "R19_IS-3"
+         const parts = baseName.split('_') // ["R19", "IS-3"]
+         const shortName = parts.slice(1).join(' ') || parts[0] // "IS-3"
 
-      const baseName = path.basename(fileName, '.xml') // "R19_IS-3"
-      const parts = baseName.split('_') // ["R19", "IS-3"]
-      const shortName = parts.slice(1).join(' ') || parts[0] // "IS-3"
-
-      const vehicle = ReturnSingleVehicle(convertedRawJSON, fileName, shortName, nation, nationDir)
-
-      fs.writeFileSync(`${outNationDir}/${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
-      console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
+         const vehicle = ReturnSingleVehicle(
+            convertedRawJSON,
+            fileName,
+            baseName,
+            nation,
+            nationDir,
+            fetchedJSONByNation
+         )
+         fs.writeFileSync(`${outNationDir}/${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
+         console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
+      }
    }
 }
+
+Main()
+
+// TODO:
+/**
+ * Query WOT API vehicles:
+ * Add these to fields: name, tank_id, images, next_tanks, is_gift, is_premium
+ * and filter by nation
+ *
+ */
