@@ -1,4 +1,4 @@
-import type { ITankData } from '@Types/Modules'
+import type { ITankData, JSONData } from '@Types/Modules'
 
 import { ReturnHull } from '@VehicleParts/Hull/HullArmor'
 import { ReturnChassis } from '@VehicleParts/Chassis/ReturnChassis'
@@ -11,13 +11,15 @@ import ReturnFuelTanks from '@VehicleParts/Other/FuelTank'
 import ReturnRadios from '@VehicleParts/Other/Radio'
 import ReturnOtherData from '@VehicleParts/Other/OtherData'
 import ReturnSiegeMode from '@VehicleParts/Other/SiegeMode'
+import MetaData from '@VehicleParts/Other/MetaData'
 
 export default function ReturnSingleVehicle(
    convertedRawJSON: any,
    fileName: string,
-   shortName: string,
+   baseName: string,
    nation: string = 'ussr',
-   nationDir: string = 'ussr'
+   nationDir: string = 'ussr',
+   fetchedJSONByNation: JSONData
 ): ITankData {
    const hullData = ReturnHull(convertedRawJSON[fileName])
    const chassisData = ReturnChassis(convertedRawJSON[fileName])
@@ -32,11 +34,14 @@ export default function ReturnSingleVehicle(
 
    const { hydropneumatic, siegeMode } = ReturnSiegeMode(convertedRawJSON[fileName])
    const otherData = ReturnOtherData(fileName, nation)
+   const metaData = MetaData(baseName, fetchedJSONByNation)
 
    const Vehicle: ITankData = {
       ...otherData,
    } as ITankData
 
+   Vehicle.id = metaData?.tank_id || null
+   Vehicle.tankDetails = Object.keys(metaData).length > 0 ? metaData : null
    Vehicle.crew = crew
    Vehicle.stats = {
       camo: camo,
