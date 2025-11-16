@@ -228,8 +228,34 @@ export interface IShells extends ISharedShell {
    speed: number
 }
 
+export interface JSONData {
+   [tank_id: number]: ITankDetails
+}
+
+export interface ITankDetails {
+   is_gift: boolean
+   next_tanks: {
+      [tank_id: number]: number
+   } | null
+   prices_xp: {
+      [tank_id: number]: number
+   } | null
+   is_premium: boolean
+   images: {
+      small_icon: string
+      contour_icon: string
+      big_icon: string
+   }
+   tank_id: number
+   /**
+    * @description Equivalent to `tankName` -> A182_T803
+    */
+   tag: string
+}
+
 export interface ITankData {
-   id: number
+   id: number | null
+   tankDetails: ITankDetails | null
    name: string
    nation: string
    price: number | { '#text': string; gold: number }
