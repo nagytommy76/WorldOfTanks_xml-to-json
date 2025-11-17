@@ -83,35 +83,28 @@ async function Main() {
          const filePath = path.join(nationDir, file)
          const xmlString = fs.readFileSync(filePath, 'utf-8')
          const fileName = path.basename(filePath)
-         // const filePath = path.join(nationDir, xmlFile)
-         // const xmlString = fs.readFileSync(filePath, 'utf-8')
+
          const convertedRawJSON = xmlParser.parse(xmlString)
-         // const fileName = path.basename('./XML/ussr/R19_IS-3.xml')
 
          const baseName = path.basename(fileName, '.xml') // "R19_IS-3"
          const parts = baseName.split('_') // ["R19", "IS-3"]
-         const shortName = parts.slice(1).join(' ') || parts[0] // "IS-3"
+         // To get tank details -> REMOVE _siege_mode
+         const withoutSiegeModeBaseName = parts
+            .filter((name) => name !== 'siege' && name !== 'mode')
+            .join('_')
 
          const vehicle = ReturnSingleVehicle(
             convertedRawJSON,
             fileName,
-            baseName,
+            withoutSiegeModeBaseName,
             nation,
             nationDir,
             fetchedJSONByNation
          )
-         fs.writeFileSync(`${outNationDir}/${shortName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
-         console.log(`Wrote ${vehicle.name} tank to ${shortName}.json`)
+         fs.writeFileSync(`${outNationDir}/${baseName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
+         console.log(`Wrote ${vehicle.name} tank to ${baseName}.json`)
       }
    }
 }
 
 Main()
-
-// TODO:
-/**
- * Query WOT API vehicles:
- * Add these to fields: name, tank_id, images, next_tanks, is_gift, is_premium
- * and filter by nation
- *
- */
