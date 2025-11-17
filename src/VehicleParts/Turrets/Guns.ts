@@ -1,9 +1,11 @@
 import { toNumber, toNumberArray } from '@Utils/xmlHelper'
 
-import { IGuns, IDualGun } from '@Types/Modules'
+import type { IGuns } from '@Types/Modules'
 
 import burstClip from './Includes/burstClip'
 import ShellsData from './Includes/ShellsData'
+import ReturnDualGuns from './Includes/DualGuns'
+import ReturnTwinGun from './Includes/TwinGun'
 
 export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
    const gunsData: IGuns[] = []
@@ -13,20 +15,8 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
       const restshellData = ShellsData(value, nationDir, key)
 
       const autoreload = { reloadTime: toNumberArray(value.autoreload?.reloadTime) }
-      const twinGun = {
-         afterShotDelay: toNumber(value.twinGun?.afterShotDelay) || 0,
-         twinGunReloadTime: toNumber(value.twinGun?.twinGunReloadTime) || 0,
-      }
-      const dualGun: IDualGun = {
-         chargeTime: toNumber(value.dualGun?.chargeTime) || 0,
-         shootImpulse: toNumber(value.dualGun?.shootImpulse) || 0,
-         reloadLockTime: toNumber(value.dualGun?.reloadLockTime) || 0,
-         reloadTimes: toNumberArray(value.dualGun?.reloadTimes) || [],
-         rateTime: toNumber(value.dualGun?.rateTime) || 0,
-         chargeThreshold: toNumber(value.dualGun?.chargeThreshold) || 0,
-         afterShotDelay: toNumber(value.dualGun?.afterShotDelay) || 0,
-         preChargeIndication: toNumber(value.dualGun?.preChargeIndication) || 0,
-      }
+      const dualGun = ReturnDualGuns(value.dualGun)
+      const twinGun = ReturnTwinGun(value.twinGun)
 
       gunsData.push({
          accuracy: toNumber(value.shotDispersionRadius) || 0,
@@ -41,8 +31,7 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
             turretRotation: toNumber(value.shotDispersionFactors?.turretRotation) || 0,
             whileDamaged: toNumber(value.shotDispersionFactors?.whileGunDamaged) || 0,
          },
-         dualAccuracy: null,
-         dualGun,
+         dualGun: Object.keys(dualGun).length > 0 ? dualGun : null,
          elevation: toNumber(value.elevation) || 0,
          elevationLimits: {
             elevation: toNumberArray(value.pitchLimits?.minPitch || []),
@@ -52,7 +41,7 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          id: key,
          name: key,
          reloadTime: toNumber(value.reloadTime) || 0,
-         twinGun,
+         twinGun: Object.keys(twinGun).length > 0 ? twinGun : null,
          //   From guns.xml file
          ...restshellData,
       })
