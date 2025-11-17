@@ -26,9 +26,10 @@ export default function ReturnOtherData(fileName: string, nation: string): IOthe
 
    const baseName = path.basename(fileName, '.xml')
    const parts = baseName.split('_')
+   const withoutSiegeModeBaseName = parts.filter((name) => name !== 'siege' && name !== 'mode').join('_')
    const shortName = parts.slice(1).join(' ') || parts[0]
 
-   const listVehicles = convertedListJSON['list.xml'][baseName]
+   const listVehicles = convertedListJSON['list.xml'][withoutSiegeModeBaseName]
 
    if (convertedListJSON && listVehicles) {
       const price = toNumber(listVehicles.price)
@@ -38,7 +39,7 @@ export default function ReturnOtherData(fileName: string, nation: string): IOthe
          otherData.price = { gold: Number(listVehicles.price['#text']) } as any
       }
       otherData.name = shortName || ''
-      otherData.xmlId = fileName
+      otherData.xmlId = baseName
       otherData.nation = nation
       const tags = toStringArray(listVehicles.tags) || []
       otherData.tags = tags

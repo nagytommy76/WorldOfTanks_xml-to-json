@@ -11,6 +11,7 @@ export default function MetaData(baseName: string, fetchedJSONByNation: JSONData
          metaData.next_tanks = vehicle.next_tanks || null
          metaData.prices_xp = vehicle.prices_xp || null
          metaData.tag = vehicle.tag
+         return metaData
       }
    }
 
