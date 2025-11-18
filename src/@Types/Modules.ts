@@ -136,6 +136,16 @@ export interface ITurrets {
    weight: number
 }
 
+export interface IDualAccuracy {
+   afterShotDispersionRadius: number
+   coolingDelay: number
+}
+
+export interface ITwinGun {
+   afterShotDelay: number
+   twinGunReloadTime: number
+}
+
 export interface IGuns {
    accuracy: number
    aimTime: number
@@ -159,7 +169,7 @@ export interface IGuns {
       afterShot: number
       whileDamaged: number
    }
-   dualAccuracy: null
+   dualAccuracy: IDualAccuracy | null
    dualGun: IDualGun | null
    elevation: number
    elevationLimits: {
@@ -173,10 +183,7 @@ export interface IGuns {
    name: string
    reloadTime: number
    shells: IShells[] // Not sure what type this should be, so leaving as any
-   twinGun: null | {
-      afterShotDelay: number
-      twinGunReloadTime: number
-   }
+   twinGun: null | ITwinGun
    weight: number
 }
 
