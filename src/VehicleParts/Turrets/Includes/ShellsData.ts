@@ -13,12 +13,12 @@ interface IRestGunData {
    dualAccuracy: IDualAccuracy | null
 }
 
-export default function ShellsData(value: any, nationDir: string, tankGunName: string) {
+export default function ShellsData(nationDir: string, tankGunName: string) {
    const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'guns')
 
    const restGunData: IRestGunData = {} as IRestGunData
 
-   if (value['#text'] === 'shared' && convertedComponentJSON) {
+   if (convertedComponentJSON) {
       const sharedGun = convertedComponentJSON[fileName]
       for (const [gunName, guns] of Object.entries(sharedGun.shared as Record<string, any>)) {
          if (tankGunName === gunName) {

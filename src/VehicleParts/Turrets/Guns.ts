@@ -12,7 +12,7 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
 
    for (const [key, value] of Object.entries(gun as Record<string, any>)) {
       const { burst, clip } = burstClip(value)
-      const restshellData = ShellsData(value, nationDir, key)
+      const restshellData = ShellsData(nationDir, key)
 
       const autoreload = { reloadTime: toNumberArray(value.autoreload?.reloadTime) }
       const dualGun = ReturnDualGuns(value.dualGun)
