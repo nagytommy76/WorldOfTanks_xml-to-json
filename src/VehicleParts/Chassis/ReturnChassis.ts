@@ -8,7 +8,7 @@ export function ReturnChassis(rawJSON: any): IChassis[] {
          const chassisName = key.split('_').slice(1)[1] || key
          chassis.push({
             price: toNumber(value.price) || 0,
-            armor: value.armor.leftTrack,
+            armor: value.armor?.leftTrack || value.trackPairParams?.armor?.leftTrack,
             level: toNumber(value.level) || 0,
             weight: toNumber(value.weight) || 0,
             terrainResistance: toNumberArray(value.terrainResistance),
