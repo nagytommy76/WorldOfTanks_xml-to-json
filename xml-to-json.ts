@@ -4,7 +4,11 @@ import xmlParser from '@Utils/xmlParser'
 import fetchMetaData from '@Utils/fetchMetaData'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
+import vehicleDifferences from './src/VehicleDiff'
 
+/**
+ * @description List of file names to exclude
+ */
 const notToIncludeFileNames = [
    'bob',
    'Dummy',
@@ -18,6 +22,7 @@ const notToIncludeFileNames = [
    'StoryMode',
    'fallout',
    'GrandFinal',
+   'SH',
    'LE',
    'CO',
    'CFE',
@@ -25,18 +30,23 @@ const notToIncludeFileNames = [
    'Bomber',
 ]
 
+/**
+ * @description Key value pair of file name starts with and nation
+ * @param key nation
+ * @param value file name starts with the letter in XML folder
+ */
 const fileNameStartsWithByNations = {
    // germany: 'G',
    // ussr: 'R',
-   // usa: 'A',
-   // france: 'F',
-   // uk: 'GB',
-   // china: 'Ch',
-   // japan: 'J',
-   // czech: 'Cz',
-   // poland: 'Pl',
-   sweden: 'S',
-   // italy: 'It',
+   usa: 'A',
+   france: 'F',
+   uk: 'GB',
+   china: 'Ch',
+   japan: 'J',
+   czech: 'Cz',
+   poland: 'Pl',
+   // sweden: 'S',
+   italy: 'It',
 }
 
 // folder with all vehicle xmls
@@ -47,9 +57,10 @@ const outputDir = path.resolve('./JSON')
 if (!fs.existsSync(outputDir)) {
    fs.mkdirSync(outputDir, { recursive: true })
 }
-
+const startTime = performance.now()
 async function Main() {
    for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNations)) {
+      console.log(`The ${nation.toUpperCase()} nation has been started to process`)
       const fetchedJSONByNation = await fetchMetaData(nation)
       // example: XML/germany
       const nationDir = path.join(xmlDir, nation)
@@ -58,7 +69,6 @@ async function Main() {
       if (!fs.existsSync(outNationDir)) {
          fs.mkdirSync(outNationDir, { recursive: true })
       }
-      // const xmlFile = fs.readFileSync('./XML/ussr/R19_IS-3.xml', 'utf8')
 
       const nationXmlFiles = fs
          .readdirSync(nationDir)
@@ -107,4 +117,20 @@ async function Main() {
    }
 }
 
-Main()
+Main().then(() => {
+   const endTime = performance.now()
+   console.log(
+      `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`
+   )
+})
+
+// const normalMode = JSON.parse(
+//    fs.readFileSync(path.join('./JSON/sweden', 'S10_Strv_103_0_Series.json'), 'utf8')
+// )
+// const siegeMode = JSON.parse(
+//    fs.readFileSync(path.join('./JSON/sweden', 'S10_Strv_103_0_Series_siege_mode.json'), 'utf8')
+// )
+
+// const compared = vehicleDifferences(normalMode, siegeMode)
+
+// console.log(JSON.stringify(compared, null, 2))
