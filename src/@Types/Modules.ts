@@ -262,6 +262,9 @@ export interface ITankDetails {
 
 export interface ITankData {
    id: number | null
+   /**
+    * @description Coming from WG API: /encyclopedia/vehicles
+    */
    tankDetails: ITankDetails | null
    name: string
    nation: string
