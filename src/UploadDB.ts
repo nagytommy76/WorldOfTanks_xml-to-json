@@ -1,7 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import connectDB from './config/connect.DB'
-import { TankModel } from '@Models/TankModel'
+import { VehicleModel } from '@Models/TankModel'
+
+import vehicleDifferences from './VehicleDiff'
 
 import { fileNameStartsWithByNations } from '@Utils/consts'
 import type { ITankData } from '@Types/Modules'
@@ -9,15 +11,12 @@ import type { ITankData } from '@Types/Modules'
 const JSONDir = path.resolve('./JSON')
 
 function hasSiegeMode(fileName: string, nationJSONFiles: string[]) {
-   return nationJSONFiles.includes(fileName)
-   //    baseName.includes('siege_mode')
-   //    const parts = baseName.split('_')
-
-   //    return parts.some((name) => name === 'siege' || name === 'mode')
+   const searchString = fileName.split('.')[0] + '_siege_mode.json'
+   return nationJSONFiles.includes(searchString)
 }
 
 export default async function UploadDB() {
-   //    await connectDB()
+   await connectDB()
 
    for (const nation of Object.keys(fileNameStartsWithByNations)) {
       const nationDir = path.join(JSONDir, nation)
@@ -31,45 +30,51 @@ export default async function UploadDB() {
          const filePath = path.join(nationDir, file)
          const JSONString = fs.readFileSync(filePath, 'utf-8')
          const fileName = path.basename(filePath)
-         //  const vehicle = JSON.parse(JSONString) as ITankData
-         //  console.log(fileName)
 
-         console.log(hasSiegeMode(fileName, nationJSONFiles))
+         const normalvehicle = JSON.parse(JSONString) as ITankData
 
-         //  const singleTank = new TankModel({
-         //     id: vehicle.id,
-         //     price: vehicle.price,
-         //     xmlId: vehicle.xmlId,
-         //     name: vehicle.name,
-         //     nation: vehicle.nation,
-         //     tags: vehicle.tags,
-         //     notInShop: vehicle.notInShop,
-         //     tier: vehicle.tier,
-         //     type: vehicle.type,
+         let siegeMode = null
 
-         //     tankDetails: vehicle.tankDetails || null,
-         //     crew: vehicle.crew,
-         //     siegeMode: vehicle.siegeMode || null,
-         //     isSiegeMode: vehicle.isSiegeMode || false,
+         if (hasSiegeMode(fileName, nationJSONFiles)) {
+            const siegeModeFilePath = path.join(nationDir, fileName.split('.')[0] + '_siege_mode.json')
+            const siegeModeJSONString = fs.readFileSync(siegeModeFilePath, 'utf-8')
+            const siegeVehicle = JSON.parse(siegeModeJSONString)
 
-         //     stats: {
-         //        camo: vehicle.stats.camo,
-         //        chassis: vehicle.stats.chassis,
-         //        engines: vehicle.stats.engines,
-         //        fuelTank: vehicle.stats.fuelTank,
-         //        hull: vehicle.stats.hull,
-         //        radios: vehicle.stats.radios,
-         //        speedLimit: vehicle.stats.speedLimit,
-         //        turrets: vehicle.stats.turrets,
-         //     },
-         //  })
+            siegeMode = vehicleDifferences(normalvehicle, siegeVehicle)
+         }
+
+         const singleTank = new VehicleModel({
+            id: normalvehicle.id,
+            price: normalvehicle.price,
+            xmlId: normalvehicle.xmlId,
+            name: normalvehicle.name,
+            nation: normalvehicle.nation,
+            tags: normalvehicle.tags,
+            notInShop: normalvehicle.notInShop,
+            tier: normalvehicle.tier,
+            type: normalvehicle.type,
+
+            tankDetails: normalvehicle.tankDetails || null,
+            crew: normalvehicle.crew,
+            siegeMode: siegeMode || null,
+            isSiegeMode: siegeMode !== null || siegeMode !== undefined || false,
+
+            stats: {
+               camo: normalvehicle.stats.camo,
+               chassis: normalvehicle.stats.chassis,
+               engines: normalvehicle.stats.engines,
+               fuelTank: normalvehicle.stats.fuelTank,
+               hull: normalvehicle.stats.hull,
+               radios: normalvehicle.stats.radios,
+               speedLimit: normalvehicle.stats.speedLimit,
+               turrets: normalvehicle.stats.turrets,
+               hydropneumatic: normalvehicle.stats.hydropneumatic || null,
+               siegeMode: normalvehicle.stats.siegeMode || null,
+            },
+         })
+         await singleTank.save()
+
+         console.log(`${normalvehicle.name} has been uploaded to MongoDB`)
       }
-
-      // const normalMode = JSON.parse(
-      //    fs.readFileSync(path.join(`../JSON/${nation}`, `${fileNameStartsWith}`), 'utf8')
-      // )
-      // const siegeMode = JSON.parse(
-      //    fs.readFileSync(path.join('./JSON/sweden', 'S10_Strv_103_0_Series_siege_mode.json'), 'utf8')
-      // )
    }
 }
