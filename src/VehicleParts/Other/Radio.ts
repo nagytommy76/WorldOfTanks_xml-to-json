@@ -20,7 +20,7 @@ export default function ReturnRadios(rawJSON: any, nationDir: string): IRadios[]
          maxHealth: toNumber(radioData.maxHealth) || 0,
          maxRegenHealth: toNumber(radioData.maxRegenHealth) || 0,
          name: radioTypes as string,
-         rice: toNumber(radioData.rice) || 0,
+         price: toNumber(radioData.price) || 0,
          repairCost: toNumber(radioData.repairCost) || 0,
          tags: toStringArray(radioData.tags?.tag) || [],
          userString: radioData.userString,
