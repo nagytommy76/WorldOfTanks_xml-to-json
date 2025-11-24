@@ -22,11 +22,9 @@ export interface IChassis {
       vehicleMovement: number
       vehicleRotation: number
    }
-   // hullPosition: number[]
    id: string
    level: number
    maxHealth: number
-   // maxLoad: number
    maxRegenHealth: number
    name: string
    repairTime: number
@@ -34,7 +32,6 @@ export interface IChassis {
    rotationSpeed: number
    terrainResistance: number[]
    weight: number
-   // wheelAngle: null
    wheeled: boolean
 }
 
@@ -87,7 +84,7 @@ export interface IRadios {
    maxHealth: number
    maxRegenHealth: number
    name: string
-   rice: number
+   price: number
    repairCost: number
    tags: string[]
    userString: string
@@ -113,14 +110,11 @@ export type AmmoType =
 export interface ITurrets {
    armor: number[]
    price: number
-   // gunPosition: number[]
    guns: IGuns[]
    hp: number
    id: string
    level: number
    name: string
-   // openTop: boolean
-   // pitch: null
    ringHealth: {
       maxHealth: number
       maxRegenHealth: number
@@ -228,7 +222,6 @@ export interface ISharedShell {
 export interface IShells extends ISharedShell {
    defaultPortion: number
    gravity: number
-   id: number
    maxDistance: number
    name: string
    piercingPower: number[]
@@ -260,6 +253,24 @@ export interface ITankDetails {
    tag: string
 }
 
+interface ITankStats {
+   camo: {
+      moving: number
+      stationary: number
+      camoBonus: number
+      firePenalty: number
+   }
+   chassis: IChassis[]
+   engines: IEngines[]
+   fuelTank: IFuelTank
+   hull: IHull
+   radios: IRadios[]
+   speedLimit: ISpeedLimit
+   turrets: ITurrets[]
+   hydropneumatic?: IHydropneumatic | null
+   siegeMode?: ISiegeMode | null
+}
+
 export interface ITankData {
    id: number | null
    /**
@@ -280,21 +291,7 @@ export interface ITankData {
       primary: string
       secondary: string[]
    }[]
-   stats: {
-      camo: {
-         moving: number
-         stationary: number
-         camoBonus: number
-         firePenalty: number
-      }
-      chassis: IChassis[]
-      engines: IEngines[]
-      fuelTank: IFuelTank
-      hull: IHull
-      radios: IRadios[]
-      speedLimit: ISpeedLimit
-      turrets: ITurrets[]
-      hydropneumatic?: IHydropneumatic | null
-      siegeMode?: ISiegeMode | null
-   }
+   isSiegeMode: boolean
+   siegeMode: null | Partial<ITankStats>
+   stats: ITankStats
 }
