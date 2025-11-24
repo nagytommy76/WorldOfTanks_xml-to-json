@@ -45,12 +45,9 @@ const guns = {
          aimTime: Number,
          arc: [Number],
          burst: {
-            type: {
-               count: { type: Number, required: false, default: null },
-               rate: { type: Number, required: false, default: null },
-               syncReloading: { type: Boolean, required: false, default: false },
-               default: null,
-            },
+            count: { type: Number, required: false, default: () => null },
+            rate: { type: Number, required: false, default: () => null },
+            syncReloading: { type: Boolean, required: false, default: false },
          },
          autoreload: {
             reloadTime: [Number],
@@ -207,21 +204,18 @@ const stats = {
       },
    ],
    hydropneumatic: {
-      type: {
-         depression: { type: Number, required: false, default: null },
-         elevation: { type: Number, required: false, default: null },
-         default: null,
-      },
+      depression: { type: Number, required: false, default: () => null },
+      elevation: { type: Number, required: false, default: () => null },
    },
    siegeMode: {
-      switchOffTime: { type: Number, required: false, default: null },
-      switchOnTime: { type: Number, required: false, default: null },
+      switchOffTime: { type: Number, required: false, default: () => null },
+      switchOnTime: { type: Number, required: false, default: () => null },
    },
 }
 
 const tankDetails = {
-   next_tanks: { type: Types.Map, of: Number, required: false, default: null },
-   prices_xp: { type: Types.Map, of: Number, required: false, default: null },
+   next_tanks: { type: Schema.Types.Map, of: Number, required: false, default: () => null },
+   prices_xp: { type: Schema.Types.Map, of: Number, required: false, default: () => null },
    is_gift: { type: Boolean, required: false, default: false },
    is_premium: { type: Boolean, required: false, default: false },
    images: {
@@ -236,8 +230,8 @@ const tankDetails = {
    tag: String,
 }
 
-const tankSchema = new Schema<ITankData>({
-   id: { type: Schema.Types.Union, of: [Number, null], default: null },
+const VehicleSchema = new Schema<ITankData>({
+   id: { type: Number, required: false, default: null },
    name: String,
    shortName: String,
    nation: String,
@@ -246,18 +240,21 @@ const tankSchema = new Schema<ITankData>({
    tier: Number,
    role: String,
    notInShop: Boolean,
-   price: Number,
+   price: { type: Schema.Types.Mixed, of: [Number, { gold: Number }] },
    xmlId: String,
-   tankDetails: { type: tankDetails, default: null, required: false },
-   siegeMode: { type: Schema.Types.Mixed, default: null, required: false },
+   tankDetails: { type: tankDetails, default: () => null, required: false, _id: false },
+   siegeMode: { type: Schema.Types.Mixed, default: () => null, required: false },
    isSiegeMode: { type: Boolean, required: false, default: false },
-   crew: [
-      {
-         primary: String,
-         secondary: [String],
-      },
-   ],
+   crew: {
+      type: [
+         {
+            primary: String,
+            secondary: [String],
+         },
+      ],
+      _id: false,
+   },
    stats,
 })
 
-export const TankModel = model<ITankData>('Tanks', tankSchema)
+export const VehicleModel = model<ITankData>('Vehicles', VehicleSchema)
