@@ -27,7 +27,8 @@
          "@/*": ["./*"],
          "@Utils/*": ["./src/utils/*"],
          "@Types/*": ["./src/@Types/*"],
-         "@XML/*": ["./XML/*"]
+         "@XML/*": ["./XML/*"],
+         "@Models/*": ["./src/models/*"]
       }
    },
    "include": ["package.json", "**/*", "**/*", ".next/types/**/*", "src/**/*"],
