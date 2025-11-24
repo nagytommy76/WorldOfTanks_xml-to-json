@@ -2,52 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import xmlParser from '@Utils/xmlParser'
 import fetchMetaData from '@Utils/fetchMetaData'
+import { fileNameStartsWithByNations, notToIncludeFileNames } from '@Utils/consts'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
-import vehicleDifferences from './src/VehicleDiff'
-
-/**
- * @description List of file names to exclude
- */
-const notToIncludeFileNames = [
-   'bob',
-   'Dummy',
-   'MapsTraining',
-   '7x7',
-   'IGR',
-   'FL',
-   'CN',
-   'NewOnBoarding',
-   'StoryModeStealth',
-   'StoryMode',
-   'fallout',
-   'GrandFinal',
-   'SH',
-   'LE',
-   'CO',
-   'CFE',
-   'Pillbox',
-   'Bomber',
-]
-
-/**
- * @description Key value pair of file name starts with and nation
- * @param key nation
- * @param value file name starts with the letter in XML folder
- */
-const fileNameStartsWithByNations = {
-   // germany: 'G',
-   // ussr: 'R',
-   usa: 'A',
-   france: 'F',
-   uk: 'GB',
-   china: 'Ch',
-   japan: 'J',
-   czech: 'Cz',
-   poland: 'Pl',
-   // sweden: 'S',
-   italy: 'It',
-}
+import UploadDB from './src/UploadDB'
 
 // folder with all vehicle xmls
 const xmlDir = path.resolve('./XML')
@@ -117,20 +75,14 @@ async function Main() {
    }
 }
 
-Main().then(() => {
+// Main().then(() => {
+//    const endTime = performance.now()
+//    console.log(
+//       `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`
+//    )
+// })
+
+UploadDB().then(() => {
    const endTime = performance.now()
-   console.log(
-      `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`
-   )
+   console.log(`DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`)
 })
-
-// const normalMode = JSON.parse(
-//    fs.readFileSync(path.join('./JSON/sweden', 'S10_Strv_103_0_Series.json'), 'utf8')
-// )
-// const siegeMode = JSON.parse(
-//    fs.readFileSync(path.join('./JSON/sweden', 'S10_Strv_103_0_Series_siege_mode.json'), 'utf8')
-// )
-
-// const compared = vehicleDifferences(normalMode, siegeMode)
-
-// console.log(JSON.stringify(compared, null, 2))
