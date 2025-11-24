@@ -5,7 +5,7 @@ import { VehicleModel } from '@Models/TankModel'
 
 import vehicleDifferences from './VehicleDiff'
 
-import { fileNameStartsWithByNations } from '@Utils/consts'
+import { fileNameStartsWithByNations, notToIncludeFileNames } from '@Utils/consts'
 import type { ITankData } from '@Types/Modules'
 
 const JSONDir = path.resolve('./JSON')
@@ -14,17 +14,23 @@ function hasSiegeMode(fileName: string, nationJSONFiles: string[]) {
    const searchString = fileName.split('.')[0] + '_siege_mode.json'
    return nationJSONFiles.includes(searchString)
 }
-
 export default async function UploadDB() {
    await connectDB()
 
    for (const nation of Object.keys(fileNameStartsWithByNations)) {
       const nationDir = path.join(JSONDir, nation)
       const nationJSONFiles = fs.readdirSync(nationDir)
-      const nationJSONFilesWithoutSiege = nationJSONFiles.filter((file) => {
-         const baseName = path.basename(file, '.json')
-         return !baseName.includes('siege_mode')
-      })
+      const nationJSONFilesWithoutSiege = nationJSONFiles
+         .filter((file) => {
+            const baseName = path.basename(file, '.json')
+            return !baseName.includes('siege_mode')
+         })
+         // Double check if there are any bad file names
+         .filter((file) => {
+            const base = path.basename(file, '.json')
+            const lower = base.toLowerCase()
+            return !notToIncludeFileNames.some((bad) => lower.includes(bad.toLowerCase()))
+         })
 
       for (const file of nationJSONFilesWithoutSiege) {
          const filePath = path.join(nationDir, file)

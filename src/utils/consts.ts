@@ -28,15 +28,15 @@ export const notToIncludeFileNames = [
  * @param value file name starts with the letter in XML folder
  */
 export const fileNameStartsWithByNations = {
-   // germany: 'G',
-   // ussr: 'R',
-   // usa: 'A',
-   // france: 'F',
-   // uk: 'GB',
-   // china: 'Ch',
-   // japan: 'J',
-   // czech: 'Cz',
-   // poland: 'Pl',
+   germany: 'G',
+   ussr: 'R',
+   usa: 'A',
+   france: 'F',
+   uk: 'GB',
+   china: 'Ch',
+   japan: 'J',
+   czech: 'Cz',
+   poland: 'Pl',
    sweden: 'S',
-   // italy: 'It',
+   italy: 'It',
 }
