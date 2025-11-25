@@ -33,6 +33,7 @@ export interface IChassis {
    terrainResistance: number[]
    weight: number
    wheeled: boolean
+   wheelAngle: number | null
 }
 
 export interface IEngines {
@@ -115,6 +116,7 @@ export interface ITurrets {
    id: string
    level: number
    name: string
+   openTop: boolean
    ringHealth: {
       maxHealth: number
       maxRegenHealth: number
@@ -232,6 +234,9 @@ export interface JSONData {
    [tank_id: number]: ITankDetails
 }
 
+/**
+ * @description From WG API
+ */
 export interface ITankDetails {
    is_gift: boolean
    next_tanks: {
