@@ -20,6 +20,7 @@ export const notToIncludeFileNames = [
    'CFE',
    'Pillbox',
    'Bomber',
+   'cl',
 ]
 
 /**

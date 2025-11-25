@@ -120,6 +120,7 @@ const stats = {
          terrainResistance: [Number],
          weight: Number,
          wheeled: Boolean,
+         wheelAngle: { type: Number, required: false, default: () => null },
       },
    ],
    engines: [
@@ -201,6 +202,7 @@ const stats = {
             repairCost: Number,
          },
          weight: Number,
+         openTop: { type: Boolean, required: false, default: false },
       },
    ],
    hydropneumatic: {
@@ -213,6 +215,9 @@ const stats = {
    },
 }
 
+/**
+ * @description From WG API
+ */
 const tankDetails = {
    next_tanks: { type: Schema.Types.Map, of: Number, required: false, default: () => null },
    prices_xp: { type: Schema.Types.Map, of: Number, required: false, default: () => null },
