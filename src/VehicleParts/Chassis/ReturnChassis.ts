@@ -4,7 +4,13 @@ import { IChassis } from '@Types/Modules'
 export function ReturnChassis(rawJSON: any): IChassis[] {
    const chassis: IChassis[] = [] as IChassis[]
    if (rawJSON?.chassis) {
+      // FOR: WheelAngle in case of wheeled vehicles: EBR105 Lyny6*6 etc
+      const physicsChassis = rawJSON.physics.chassis as { [chassisName: string]: any } | undefined
       for (const [key, value] of Object.entries(rawJSON.chassis as Record<string, any>)) {
+         let wheelAngle: null | number = null
+         if (physicsChassis && physicsChassis[key] && physicsChassis[key].axleSteeringLockAngles) {
+            wheelAngle = toNumberArray(physicsChassis[key].axleSteeringLockAngles)[0]
+         }
          const chassisName = key.split('_').slice(1)[1] || key
          chassis.push({
             price: toNumber(value.price) || 0,
@@ -16,6 +22,7 @@ export function ReturnChassis(rawJSON: any): IChassis[] {
             maxHealth: toNumber(value.maxHealth) || 0,
             maxRegenHealth: toNumber(value.maxRegenHealth) || 0,
             repairTime: toNumber(value.repairTime) || 0,
+            wheelAngle: wheelAngle || null,
             dispersion: {
                vehicleMovement: toNumber(value.shotDispersionFactors?.vehicleMovement) || 0,
                vehicleRotation: toNumber(value.shotDispersionFactors?.vehicleRotation) || 0,

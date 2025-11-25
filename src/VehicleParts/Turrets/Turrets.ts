@@ -31,7 +31,7 @@ export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets
             weight: toNumber(value.weight) || 0,
             traverse: toNumber(value.rotationSpeed) || 0,
             viewRange: toNumber(value.circularVisionRadius) || 0,
-
+            openTop: value.ceilless === 'true' || false,
             ringHealth: {
                maxHealth: toNumber(value.turretRotatorHealth?.maxHealth) || 0,
                maxRegenHealth: toNumber(value.turretRotatorHealth?.maxRegenHealth) || 0,
