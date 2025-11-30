@@ -28,8 +28,7 @@ export default async function UploadDB() {
          // Double check if there are any bad file names
          .filter((file) => {
             const base = path.basename(file, '.json')
-            const lower = base.toLowerCase()
-            return !notToIncludeFileNames.some((bad) => lower.includes(bad.toLowerCase()))
+            return !notToIncludeFileNames.some((bad) => base.includes(bad))
          })
 
       for (const file of nationJSONFilesWithoutSiege) {
@@ -63,7 +62,7 @@ export default async function UploadDB() {
             tankDetails: normalvehicle.tankDetails || null,
             crew: normalvehicle.crew,
             siegeMode: siegeMode || null,
-            isSiegeMode: siegeMode !== null || siegeMode !== undefined || false,
+            isSiegeMode: siegeMode !== undefined ? true : false,
 
             stats: {
                camo: normalvehicle.stats.camo,

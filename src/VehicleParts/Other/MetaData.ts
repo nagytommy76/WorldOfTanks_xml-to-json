@@ -8,9 +8,13 @@ export default function MetaData(baseName: string, fetchedJSONByNation: JSONData
          metaData.images = vehicle.images
          metaData.is_gift = vehicle.is_gift
          metaData.is_premium = vehicle.is_premium
+         metaData.is_premium_igr = vehicle.is_premium_igr
          metaData.next_tanks = vehicle.next_tanks || null
          metaData.prices_xp = vehicle.prices_xp || null
          metaData.tag = vehicle.tag
+         metaData.description = vehicle.description
+         metaData.short_name = vehicle.short_name
+         metaData.name = vehicle.name
          return metaData
       }
    }

@@ -38,8 +38,7 @@ async function Main() {
          // exclude training / special mode vehicles
          .filter((file) => {
             const base = path.basename(file, '.xml')
-            const lower = base.toLowerCase()
-            return !notToIncludeFileNames.some((bad) => lower.includes(bad.toLowerCase()))
+            return !notToIncludeFileNames.some((bad) => base.includes(bad))
          })
 
       if (nationXmlFiles.length === 0) {
@@ -78,11 +77,17 @@ async function Main() {
 // Main().then(() => {
 //    const endTime = performance.now()
 //    console.log(
-//       `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`
+//       `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(
+//          3
+//       )} seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
 //    )
 // })
 
 UploadDB().then(() => {
    const endTime = performance.now()
-   console.log(`DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(3)} seconds`)
+   console.log(
+      `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
+         3
+      )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
+   )
 })

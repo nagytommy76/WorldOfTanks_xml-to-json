@@ -238,24 +238,28 @@ export interface JSONData {
  * @description From WG API
  */
 export interface ITankDetails {
+   tank_id: number
    is_gift: boolean
+   is_premium: boolean
+   is_premium_igr: boolean
    next_tanks: {
       [tank_id: number]: number
    } | null
    prices_xp: {
       [tank_id: number]: number
    } | null
-   is_premium: boolean
    images: {
       small_icon: string
       contour_icon: string
       big_icon: string
    }
-   tank_id: number
    /**
     * @description Equivalent to `tankName` -> A182_T803
     */
    tag: string
+   name: string
+   short_name: string
+   description: string
 }
 
 interface ITankStats {

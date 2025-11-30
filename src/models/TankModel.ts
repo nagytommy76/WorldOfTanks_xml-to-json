@@ -1,4 +1,4 @@
-import { Schema, model, Types } from 'mongoose'
+import { Schema, model } from 'mongoose'
 import type { ITankData } from '@Types/Modules'
 
 const shells = {
@@ -233,6 +233,10 @@ const tankDetails = {
    big_icon: String,
    tank_id: Number,
    tag: String,
+   description: String,
+   short_name: String,
+   name: String,
+   is_premium_igr: { type: Boolean, required: false, default: false },
 }
 
 const VehicleSchema = new Schema<ITankData>({
