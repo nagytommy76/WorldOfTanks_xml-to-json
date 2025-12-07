@@ -253,7 +253,6 @@ const VehicleSchema = new Schema<ITankData>({
    xmlId: String,
    tankDetails: { type: tankDetails, default: () => null, required: false, _id: false },
    siegeMode: { type: Schema.Types.Mixed, default: () => null, required: false },
-   isSiegeMode: { type: Boolean, required: false, default: false },
    crew: {
       type: [
          {

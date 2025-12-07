@@ -300,7 +300,6 @@ export interface ITankData {
       primary: string
       secondary: string[]
    }[]
-   isSiegeMode: boolean
    siegeMode: null | Partial<ITankStats>
    stats: ITankStats
 }
