@@ -25,9 +25,19 @@ export default function ReturnShells(shellTypeName: string, nationDir: string): 
                price: toNumber(shellData.price) || 0,
                ricochetAngle: toNumber(shellData.ricochetAngle) || 0,
                userString: shellData.userString as string,
+               /**
+                *  <armorSpalls>
+                     <impactRadius>	0.21	</impactRadius>
+                     <coneAngle>	90	</coneAngle>
+                     <damage>
+                     <armor>	20	</armor>
+                     <devices>	20	</devices>
+                     </damage>
+                  </armorSpalls>
+                */
                armorSpalls: null,
-               explosionRadius: null,
-               mechanics: null,
+               explosionRadius: shellData.explosionRadius ? toNumber(shellData.explosionRadius) || 0 : null,
+               mechanics: shellData.mechanics ? (shellData.mechanics as string) : null,
             }
             if (shellData.armorSpalls && shellData.explosionRadius && shellData.mechanics) {
                shellsData.armorSpalls = {

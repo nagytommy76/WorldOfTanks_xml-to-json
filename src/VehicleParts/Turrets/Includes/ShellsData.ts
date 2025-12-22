@@ -7,7 +7,6 @@ import RetunDualAccuracy from './DualAccuracy'
 
 interface IRestGunData {
    level: number
-   maxAmmo: number
    weight: number
    shells: IShells[]
    dualAccuracy: IDualAccuracy | null
@@ -25,7 +24,6 @@ export default function ShellsData(nationDir: string, tankGunName: string) {
             const dualAccuracy = RetunDualAccuracy(guns.dualAccuracy)
 
             restGunData['level'] = toNumber(guns.level) || 0
-            restGunData['maxAmmo'] = toNumber(guns.maxAmmo) || 0
             restGunData['weight'] = toNumber(guns.weight) || 0
             restGunData.dualAccuracy = Object.keys(dualAccuracy).length > 0 ? dualAccuracy : null
 

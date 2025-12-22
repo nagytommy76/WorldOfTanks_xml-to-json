@@ -2,6 +2,7 @@ import { toNumber, toNumberArray, toStringArray } from '@Utils/xmlHelper'
 import { ITurrets } from '@Types/Modules'
 
 import ReturnGuns from './Guns'
+import ReturnSecondaryGuns from './Includes/secondaryGuns'
 
 function returnMainArmor(primaryArmor: string, armorArray: { [key: string]: string }): number[] {
    const mainArmor = toStringArray(primaryArmor)
@@ -20,6 +21,7 @@ export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets
          const primaryArmorValues = returnMainArmor(value.primaryArmor as string, value.armor)
          const chassisHealth = toNumber(rawJSON.hull.maxHealth) || 0
          const turretHealt = toNumber(value.maxHealth) || 0
+         const secondaryGuns = ReturnSecondaryGuns(value.secondaryGuns, nationDir)
          const vehicleMaxHealtWithTurret = chassisHealth + turretHealt
 
          turretData.push({
@@ -43,6 +45,10 @@ export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets
                repairCost: toNumber(value.surveyingDeviceHealth?.repairCost) || 0,
             },
             hp: vehicleMaxHealtWithTurret,
+            /**
+             * Only in Taschenratte
+             */
+            secondaryGuns,
             guns,
          })
       }
