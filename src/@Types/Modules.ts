@@ -130,6 +130,7 @@ export interface ITurrets {
       repairCost: number
    }
    weight: number
+   secondaryGuns?: ISecondaryGuns[] | null
 }
 
 export interface IDualAccuracy {
@@ -140,6 +141,22 @@ export interface IDualAccuracy {
 export interface ITwinGun {
    afterShotDelay: number
    twinGunReloadTime: number
+}
+
+export interface ISecondaryGuns {
+   reloadTime: number
+   burst: {
+      count: number
+      rate: number
+   }
+   aimingTime: number
+   shotDispersionRadius: number
+   shotDispersionFactors: {
+      turretRotation: number
+      afterShot: number
+      whileGunDamaged: number
+   }
+   invisibilityFactorAtShot: number
 }
 
 export interface IGuns {
@@ -178,6 +195,7 @@ export interface IGuns {
    maxAmmo: number
    name: string
    reloadTime: number
+   invisibilityFactorAtShot: number
    shells: IShells[] // Not sure what type this should be, so leaving as any
    twinGun: null | ITwinGun
    weight: number

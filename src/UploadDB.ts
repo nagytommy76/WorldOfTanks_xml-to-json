@@ -62,7 +62,6 @@ export default async function UploadDB() {
             tankDetails: normalvehicle.tankDetails || null,
             crew: normalvehicle.crew,
             siegeMode: siegeMode || null,
-            isSiegeMode: siegeMode !== undefined ? true : false,
 
             stats: {
                camo: normalvehicle.stats.camo,
