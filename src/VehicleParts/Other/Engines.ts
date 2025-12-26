@@ -9,7 +9,9 @@ export default function ReturnEngines(rawJson: any, nationDir: string): IEngines
    const enginesArray: IEngines[] = []
    const vehicleEngines = rawJson.engines
    if (convertedComponentJSON[fileName] && vehicleEngines) {
+      const detailedEngines = rawJson.physics.detailed.engines
       const sharedEngines = convertedComponentJSON[fileName].shared
+
       for (const engineName of Object.keys(vehicleEngines)) {
          const engine = sharedEngines[engineName] as IEngines
          enginesArray.push({
@@ -17,7 +19,7 @@ export default function ReturnEngines(rawJson: any, nationDir: string): IEngines
             maxHealth: toNumber(engine.maxHealth) || 0,
             maxRegenHealth: toNumber(engine.maxRegenHealth) || 0,
             name: engineName,
-            power: toNumber(engine.power) || 0,
+            power: toNumber(detailedEngines[engineName].smplEnginePower) || toNumber(engine.power) || 0,
             price: toNumber(engine.price) || 0,
             realPower: toNumber(engine.realPower) || 0,
             repairCost: toNumber(engine.repairCost) || 0,
