@@ -89,8 +89,12 @@ const guns = {
          reloadTime: Number,
          invisibilityFactorAtShot: Number,
          shells,
-         twinGun: {},
+         twinGun: {
+            afterShotDelay: Number,
+            twinGunReloadTime: Number,
+         },
          weight: Number,
+         mechanics: Schema.Types.Mixed,
       },
    ],
 }
@@ -248,10 +252,7 @@ const stats = {
       depression: { type: Number, required: false, default: () => null },
       elevation: { type: Number, required: false, default: () => null },
    },
-   siegeMode: {
-      switchOffTime: { type: Number, required: false, default: () => null },
-      switchOnTime: { type: Number, required: false, default: () => null },
-   },
+   siegeMode: Schema.Types.Mixed,
 }
 
 /**
@@ -302,6 +303,7 @@ const VehicleSchema = new Schema<ITankData>({
       _id: false,
    },
    stats,
+   mechanics: Schema.Types.Mixed,
 })
 
 export const VehicleModel = model<ITankData>('Vehicles', VehicleSchema)

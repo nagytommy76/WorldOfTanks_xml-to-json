@@ -176,6 +176,7 @@ export interface IGuns {
       count: number
       rate: number
    } | null
+   mechanics?: any
    depression: number
    dispersion: {
       turretRotation: number
@@ -320,4 +321,5 @@ export interface ITankData {
    }[]
    siegeMode: null | Partial<ITankStats>
    stats: ITankStats
+   mechanics: any
 }
