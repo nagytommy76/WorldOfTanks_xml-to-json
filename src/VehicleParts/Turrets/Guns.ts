@@ -18,7 +18,7 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
       const dualGun = ReturnDualGuns(value.dualGun)
       const twinGun = ReturnTwinGun(value.twinGun)
 
-      gunsData.push({
+      const gunItems: IGuns = {
          maxAmmo: toNumber(value.maxAmmo) || 0,
          accuracy: toNumber(value.shotDispersionRadius) || 0,
          aimTime: toNumber(value.aimingTime) || 0,
@@ -46,7 +46,13 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          twinGun: Object.keys(twinGun).length > 0 ? twinGun : null,
          //   From guns.xml file
          ...restshellData,
-      })
+      }
+
+      if (value.mechanics) {
+         gunItems['mechanics'] = value.mechanics
+      }
+
+      gunsData.push(gunItems)
    }
    return gunsData
 }
