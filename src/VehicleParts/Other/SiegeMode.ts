@@ -2,10 +2,11 @@ import { toNumber } from '@/src/utils/xmlHelper'
 import { ISiegeMode, IHydropneumatic } from '@Types/Modules'
 
 export default function ReturnSiegeMode(rawJSON: any) {
-   let siegeMode: ISiegeMode | null = { switchOffTime: 0, switchOnTime: 0 }
-   if (rawJSON?.siegeMode) {
-      siegeMode.switchOffTime = toNumber(rawJSON.siege_mode?.switchOffTime) || 0
-      siegeMode.switchOnTime = toNumber(rawJSON.siege_mode?.switchOnTime) || 0
+   let siegeMode: any | null = {}
+   if (rawJSON?.siege_mode) {
+      for (const [key, siegeValue] of Object.entries(rawJSON.siege_mode)) {
+         siegeMode[key] = toNumber(siegeValue) || siegeValue || 0
+      }
 
       return siegeMode
    } else {
