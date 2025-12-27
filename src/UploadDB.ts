@@ -45,7 +45,9 @@ export default async function UploadDB() {
             const siegeModeJSONString = fs.readFileSync(siegeModeFilePath, 'utf-8')
             const siegeVehicle = JSON.parse(siegeModeJSONString)
 
-            siegeMode = vehicleDifferences(normalvehicle, siegeVehicle)
+            const vehicleDifference = vehicleDifferences(normalvehicle, siegeVehicle) as { stats: any }
+
+            siegeMode = vehicleDifference.stats
          }
 
          const singleTank = new VehicleModel({
@@ -62,6 +64,7 @@ export default async function UploadDB() {
             tankDetails: normalvehicle.tankDetails || null,
             crew: normalvehicle.crew,
             siegeMode: siegeMode || null,
+            mechanics: normalvehicle.mechanics || null,
 
             stats: {
                camo: normalvehicle.stats.camo,
