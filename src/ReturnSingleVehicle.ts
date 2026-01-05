@@ -12,6 +12,7 @@ import ReturnRadios from '@VehicleParts/Other/Radio'
 import ReturnOtherData from '@VehicleParts/Other/OtherData'
 import ReturnSiegeMode, { ReturnHydropneumatic } from '@VehicleParts/Other/SiegeMode'
 import MetaData from '@VehicleParts/Other/MetaData'
+import ReturnRocketBoosters from '@VehicleParts/Other/RocketBooster'
 
 import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 
@@ -58,6 +59,8 @@ export default function ReturnSingleVehicle(
    const otherData = ReturnOtherData(fileName, nation)
    const metaData = MetaData(baseName, fetchedJSONByNation)
 
+   const rocketBoosters = ReturnRocketBoosters(convertedRawJSON[fileName].rocketAcceleration)
+
    const Vehicle: ITankData = {
       ...otherData,
    } as ITankData
@@ -78,6 +81,7 @@ export default function ReturnSingleVehicle(
       radios: radios,
       speedLimit: speedLimits,
       turrets: turretsData,
+      rocketAcceleration: rocketBoosters,
    }
    if (hydropneumatic) {
       Vehicle.stats.hydropneumatic = hydropneumatic
