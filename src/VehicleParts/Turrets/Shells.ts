@@ -1,4 +1,4 @@
-import { toNumber } from '@Utils/xmlHelper'
+import { toNumber, toNumberArray } from '@Utils/xmlHelper'
 import convertedJSON from '@Utils/convertedJson'
 
 import type { AmmoType, ISharedShell } from '@Types/Modules'
@@ -13,8 +13,8 @@ export default function ReturnShells(shellTypeName: string, nationDir: string): 
             shellsData = {
                caliber: toNumber(shellData.caliber) || 0,
                damage: {
-                  armor: toNumber(shellData.damage.armor) || 0,
-                  devices: toNumber(shellData.damage.devices) || 0,
+                  armor: toNumber(shellData.damage.armor) || toNumberArray(shellData.damage.armor) || 0,
+                  devices: toNumber(shellData.damage.devices) || toNumberArray(shellData.damage.devices) || 0,
                },
                effects: shellData.effects as string,
                icon: shellData.icon as string,
@@ -25,17 +25,16 @@ export default function ReturnShells(shellTypeName: string, nationDir: string): 
                price: toNumber(shellData.price) || 0,
                ricochetAngle: toNumber(shellData.ricochetAngle) || 0,
                userString: shellData.userString as string,
-               /**
-                *  <armorSpalls>
-                     <impactRadius>	0.21	</impactRadius>
-                     <coneAngle>	90	</coneAngle>
-                     <damage>
-                     <armor>	20	</armor>
-                     <devices>	20	</devices>
-                     </damage>
-                  </armorSpalls>
-                */
-               armorSpalls: null,
+               armorSpalls: shellData.armorSpalls
+                  ? {
+                       impactRadius: toNumber(shellData.armorSpalls?.impactRadius) || 0,
+                       coneAngle: toNumber(shellData.armorSpalls?.coneAngle) || 0,
+                       damage: {
+                          armor: toNumber(shellData.armorSpalls?.damage.armor) || 0,
+                          devices: toNumber(shellData.armorSpalls?.damage.devices) || 0,
+                       },
+                    }
+                  : null,
                explosionRadius: shellData.explosionRadius ? toNumber(shellData.explosionRadius) || 0 : null,
                mechanics: shellData.mechanics ? (shellData.mechanics as string) : null,
             }
