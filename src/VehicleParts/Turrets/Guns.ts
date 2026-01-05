@@ -14,7 +14,6 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
       const { burst, clip } = burstClip(value)
       const restshellData = ShellsData(nationDir, key)
 
-      const autoreload = { reloadTime: toNumberArray(value.autoreload?.reloadTime) }
       const dualGun = ReturnDualGuns(value.dualGun)
       const twinGun = ReturnTwinGun(value.twinGun)
 
@@ -23,7 +22,14 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          accuracy: toNumber(value.shotDispersionRadius) || 0,
          aimTime: toNumber(value.aimingTime) || 0,
          arc: toNumberArray(value.turretYawLimits || []),
-         autoreload: autoreload.reloadTime.length > 0 ? autoreload : null,
+         autoreload: value.autoreload
+            ? {
+                 reloadTime: toNumberArray(value.autoreload.reloadTime),
+                 boostFraction: toNumber(value.autoreload.boostFraction),
+                 boostStartTime: toNumber(value.autoreload.boostStartTime),
+                 boostResidueTime: toNumber(value.autoreload.boostResidueTime),
+              }
+            : null,
          burst,
          clip,
          depression: toNumber(value.depressionAngle) || 0,

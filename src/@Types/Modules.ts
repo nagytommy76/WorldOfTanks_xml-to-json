@@ -171,6 +171,9 @@ export interface IGuns {
    } | null
    autoreload: {
       reloadTime: number[]
+      boostFraction?: number
+      boostStartTime?: number
+      boostResidueTime?: number
    } | null
    clip: {
       count: number
@@ -215,8 +218,8 @@ export interface IDualGun {
 
 export interface ISharedShell {
    damage: {
-      armor: number
-      devices: number
+      armor: number | number[]
+      devices: number | number[]
    }
    caliber: number
    effects: string
@@ -281,6 +284,17 @@ export interface ITankDetails {
    description: string
 }
 
+export interface IRocketAcceleration {
+   deployTime: number
+   reloadTime: number
+   reuseCount: number
+   duration: number
+   vehicleEnginePower: number
+   vehicleForwardMaxSpeed: number
+   vehicleBackwardMaxSpeed: number
+   vehicleAllGroundRotationSpeed: number
+}
+
 interface ITankStats {
    camo: {
       moving: number
@@ -297,6 +311,7 @@ interface ITankStats {
    turrets: ITurrets[]
    hydropneumatic?: IHydropneumatic | null
    siegeMode?: ISiegeMode | null
+   rocketAcceleration?: IRocketAcceleration | null
 }
 
 export interface ITankData {
