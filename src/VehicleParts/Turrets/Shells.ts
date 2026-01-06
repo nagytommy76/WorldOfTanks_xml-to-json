@@ -50,6 +50,11 @@ export default function ReturnShells(shellTypeName: string, nationDir: string): 
                shellsData.explosionRadius = toNumber(shellData.explosionRadius) || 0
                shellsData.mechanics = shellData.mechanics as string
             }
+            if (shellData.hasStun) {
+               shellsData.hasStun = shellData.hasStun
+               shellsData.stunDuration = toNumber(shellData.stunDuration)
+               shellsData.guaranteedStunDuration = toNumber(shellData.guaranteedStunDuration)
+            }
          }
       }
    }
