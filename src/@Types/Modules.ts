@@ -179,6 +179,11 @@ export interface IGuns {
       count: number
       rate: number
    } | null
+   autoShoot?: {
+      shotDispersionPerSec: number
+      maxShotDispersion: number
+      groupSize: number
+   }
    mechanics?: any
    depression: number
    dispersion: {
@@ -200,7 +205,7 @@ export interface IGuns {
    name: string
    reloadTime: number
    invisibilityFactorAtShot: number
-   shells: IShells[] // Not sure what type this should be, so leaving as any
+   shells: IShells[]
    twinGun: null | ITwinGun
    weight: number
 }
@@ -239,6 +244,12 @@ export interface ISharedShell {
          devices: number
       }
    } | null
+   hasStun?: boolean
+   stunDuration?: number
+   /**
+    * @description stunDuration * guaranteedStunDuration = minimum stun duration
+    */
+   guaranteedStunDuration?: number
    explosionRadius: number | null
    mechanics: string | null
 }
