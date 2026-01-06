@@ -77,6 +77,7 @@ export default async function UploadDB() {
                turrets: normalvehicle.stats.turrets,
                hydropneumatic: normalvehicle.stats.hydropneumatic || null,
                siegeMode: normalvehicle.stats.siegeMode || null,
+               rocketAcceleration: normalvehicle.stats.rocketAcceleration || null,
             },
          })
          await singleTank.save()

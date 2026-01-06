@@ -11,8 +11,8 @@ const shells = {
          piercingPower: [Number],
          speed: Number,
          damage: {
-            armor: Number,
-            devices: Number,
+            armor: { type: Schema.Types.Mixed, of: [Number, [Number]] },
+            devices: { type: Schema.Types.Mixed, of: [Number, [Number]] },
          },
          caliber: Number,
          effects: String,
@@ -34,6 +34,12 @@ const shells = {
          },
          explosionRadius: Number,
          mechanics: String,
+         hasStun: Boolean,
+         stunDuration: Number,
+         /**
+          * @description stunDuration * guaranteedStunDuration = minimum stun duration
+          */
+         guaranteedStunDuration: Number,
       },
    ],
 }
@@ -51,6 +57,9 @@ const guns = {
          },
          autoreload: {
             reloadTime: [Number],
+            boostFraction: Number,
+            boostStartTime: Number,
+            boostResidueTime: Number,
          },
          clip: {
             count: Number,
@@ -75,6 +84,11 @@ const guns = {
             reloadLockTime: Number,
             reloadTimes: [Number],
             shootImpulse: Number,
+         },
+         autoShoot: {
+            shotDispersionPerSec: Number,
+            maxShotDispersion: Number,
+            groupSize: Number,
          },
          elevation: Number,
          elevationLimits: {
@@ -253,6 +267,20 @@ const stats = {
       elevation: { type: Number, required: false, default: () => null },
    },
    siegeMode: Schema.Types.Mixed,
+   rocketAcceleration: {
+      type: {
+         deployTime: Number,
+         reloadTime: Number,
+         reuseCount: Number,
+         duration: Number,
+         vehicleEnginePower: Number,
+         vehicleForwardMaxSpeed: Number,
+         vehicleBackwardMaxSpeed: Number,
+         vehicleAllGroundRotationSpeed: Number,
+      },
+      required: false,
+      default: () => null,
+   },
 }
 
 /**
