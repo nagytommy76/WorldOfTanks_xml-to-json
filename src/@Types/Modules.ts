@@ -33,7 +33,7 @@ export interface IChassis {
    terrainResistance: number[]
    weight: number
    wheeled: boolean
-   wheelAngle: number | null
+   wheelAngle: number[] | null
 }
 
 export interface IEngines {
