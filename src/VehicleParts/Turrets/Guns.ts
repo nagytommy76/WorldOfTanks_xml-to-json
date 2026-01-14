@@ -54,10 +54,16 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          ...restshellData,
       }
 
-      if (value.autoShoot && gunItems.autoShoot) {
-         gunItems.autoShoot['shotDispersionPerSec'] = toNumber(value.autoShoot.shotDispersionPerSec) || 0
-         gunItems.autoShoot['maxShotDispersion'] = toNumber(value.autoShoot.maxShotDispersion) || 0
-         gunItems.autoShoot['groupSize'] = toNumber(value.autoShoot.groupSize) || 0
+      if (value.autoShoot) {
+         gunItems.autoShoot = {
+            shotDispersionPerSec: toNumber(value.autoShoot.shotDispersionPerSec) || 0,
+            maxShotDispersion: toNumber(value.autoShoot.maxShotDispersion) || 0,
+            groupSize: toNumber(value.autoShoot.groupSize) || 0,
+         }
+         if (value.autoShoot.shotDispersionPerShot && value.autoShoot.aimingDelay) {
+            gunItems.autoShoot['shotDispersionPerShot'] = toNumber(value.autoShoot.shotDispersionPerShot) || 0
+            gunItems.autoShoot['aimingDelay'] = toNumber(value.autoShoot.aimingDelay) || 0
+         }
       }
 
       if (value.mechanics) {
