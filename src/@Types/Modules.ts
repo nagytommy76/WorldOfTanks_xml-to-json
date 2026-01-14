@@ -183,6 +183,8 @@ export interface IGuns {
       shotDispersionPerSec: number
       maxShotDispersion: number
       groupSize: number
+      aimingDelay?: number
+      shotDispersionPerShot?: number
    }
    mechanics?: any
    depression: number
