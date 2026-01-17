@@ -16,8 +16,10 @@ import ReturnRocketBoosters from '@VehicleParts/Other/RocketBooster'
 
 import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 
-const TIER_XI_VEHICLES = [
+const VEHICLES_WITH_MECHANICS = [
    'Ch67_BZ_79',
+   'Ch70_PTZ_78',
+   'J52_STK_2',
    'F135_AS_XX_40_t',
    'F136_AMX_67_Imbattable',
    'G185_Leopard_120_Verbessert',
@@ -28,11 +30,16 @@ const TIER_XI_VEHICLES = [
    'S36_Strv_107_12',
    'GB147_FV4025_Contriver',
    'GB152_AT_FV230_Breaker',
+   'R228_KR_1',
+   'R230_Object_432U',
    'A179_Black_Rock',
    'A182_T803',
    'A183_XM69_Hacker',
-   'R228_KR_1',
-   'R230_Object_432U',
+   'A187_Ares_75',
+   'A188_Ares_MTB',
+   'A189_Ares_90',
+   'A190_Ares_85',
+   'A191_Ares_90_C',
 ]
 
 export default function ReturnSingleVehicle(
@@ -65,7 +72,7 @@ export default function ReturnSingleVehicle(
       ...otherData,
    } as ITankData
 
-   if (TIER_XI_VEHICLES.includes(fileName.split('.')[0])) {
+   if (VEHICLES_WITH_MECHANICS.includes(fileName.split('.')[0])) {
       Vehicle.mechanics = Mechanics(convertedRawJSON[fileName].mechanics, fileName)
    }
 
