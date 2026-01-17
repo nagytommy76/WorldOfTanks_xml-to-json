@@ -6,10 +6,7 @@ import { fileNameStartsWithByNations, notToIncludeFileNames } from '@Utils/const
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
 import UploadDB from './src/UploadDB'
-
-import vehicleDifferences from './src/VehicleDiff'
-
-import Mechanics from '@VehicleParts/Mechanics/Mechanics'
+// import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 
 // folder with all vehicle xmls
 const xmlDir = path.resolve('./XML')
@@ -78,33 +75,11 @@ async function Main() {
    }
 }
 
-// const strv = fs.readFileSync('./JSON/sweden/S11_Strv_103B.json', 'utf-8') as any
-// const strvSiege = fs.readFileSync('./JSON/sweden/S11_Strv_103B_siege_mode.json', 'utf-8') as any
-// const strv = fs.readFileSync('./JSON/germany/G147_Kunze_Panzer.json', 'utf-8') as any
-// const strvSiege = fs.readFileSync('./JSON/germany/G147_Kunze_Panzer_siege_mode.json', 'utf-8') as any
-
-// const strvJSON = JSON.parse(strv)
-// const strvSiegeJSON = JSON.parse(strvSiege)
-
-// const BZ79XML = fs.readFileSync('./XML/china/Ch67_BZ_79.xml', 'utf-8')
+// const BZ79XML = fs.readFileSync('./XML/usa/A187_Ares_75.xml', 'utf-8')
 // const BZ79JSON = xmlParser.parse(BZ79XML)
-// const fileName = path.basename('./XML/china/Ch67_BZ_79.xml')
-// Mechanics(BZ79JSON[fileName].mechanics, 'Ch67_BZ_79.xml')
+// const fileName = path.basename('./XML/usa/A187_Ares_75.xml')
 
-// const BZ79XML = fs.readFileSync('./XML/uk/GB147_FV4025_Contriver.xml', 'utf-8')
-// const BZ79JSON = xmlParser.parse(BZ79XML)
-// const fileName = path.basename('./XML/uk/GB147_FV4025_Contriver.xml')
-
-// Mechanics(BZ79JSON[fileName].mechanics, 'GB147_FV4025_Contriver.xml')
-// const BZ79XML = fs.readFileSync('./XML/france/F135_AS_XX_40_t.xml', 'utf-8')
-// const BZ79JSON = xmlParser.parse(BZ79XML)
-// const fileName = path.basename('./XML/france/F135_AS_XX_40_t.xml')
-
-// Mechanics(BZ79JSON[fileName].mechanics, 'F135_AS_XX_40_t.xml')
-
-// const differences = vehicleDifferences(strvJSON, strvSiegeJSON)
-
-// fs.writeFileSync(`TEST.json`, JSON.stringify(differences, null, 2), 'utf8')
+// console.log('FINAL MECHAINCS: ', Mechanics(BZ79JSON[fileName].mechanics, 'A187_Ares_75.xml'))
 
 // Main().then(() => {
 //    const endTime = performance.now()

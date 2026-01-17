@@ -89,6 +89,8 @@ const guns = {
             shotDispersionPerSec: Number,
             maxShotDispersion: Number,
             groupSize: Number,
+            aimingDelay: Number,
+            shotDispersionPerShot: Number,
          },
          elevation: Number,
          elevationLimits: {
