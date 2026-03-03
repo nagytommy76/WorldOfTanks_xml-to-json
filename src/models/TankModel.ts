@@ -306,6 +306,7 @@ const tankDetails = {
    description: String,
    short_name: String,
    name: String,
+   provisions: { type: [Number], required: false },
    is_premium_igr: { type: Boolean, required: false, default: false },
 }
 
