@@ -277,6 +277,7 @@ export interface ITankDetails {
    is_gift: boolean
    is_premium: boolean
    is_premium_igr: boolean
+   provisions: number[]
    next_tanks: {
       [tank_id: number]: number
    } | null
