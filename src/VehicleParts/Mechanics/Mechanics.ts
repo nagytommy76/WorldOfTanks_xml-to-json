@@ -13,7 +13,7 @@ function fillObject(returnVehicleMechanics: any, vehicleMechanics: any, mechanic
 
 export default function ReturnTierXIMechanics(vehicleMechanics: any, fileName: string) {
    const fileNameSplit = fileName.split('.')[0]
-   const vehicleMechanicsXML = fs.readFileSync('XML/vehicle_mechanics.xml', 'utf-8')
+   const vehicleMechanicsXML = fs.readFileSync('XML/common/vehicle_mechanics.xml', 'utf-8')
    const vehicleMechanicsJSON = xmlParser.parse(vehicleMechanicsXML)
 
    const mechanics = Object.values(vehicleMechanicsJSON['vehicle_mechanics.xml'])[0] as any[]
