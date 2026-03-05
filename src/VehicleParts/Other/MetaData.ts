@@ -15,6 +15,7 @@ export default function MetaData(baseName: string, fetchedJSONByNation: JSONData
          metaData.description = vehicle.description
          metaData.short_name = vehicle.short_name
          metaData.name = vehicle.name
+         metaData.provisions = vehicle.provisions
          return metaData
       }
    }
