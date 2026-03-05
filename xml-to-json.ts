@@ -1,54 +1,32 @@
 import fs from 'fs'
 import path from 'path'
 import xmlParser from '@Utils/xmlParser'
+
 import fetchMetaData from '@Utils/fetchMetaData'
-import { fileNameStartsWithByNations, notToIncludeFileNames } from '@Utils/consts'
+import fetchEquipments from '@Utils/fetchEquipments'
+
+import { fileNameStartsWithByNations } from '@Utils/consts'
+
+import type { NationType } from '@Types/Vehicle'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
-import UploadDB from './src/UploadDB'
+// import UploadDB from './src/UploadDB'
 // import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 
-// folder with all vehicle xmls
-const xmlDir = path.resolve('./XML')
+import Equipment from '@/src/VehicleEquipments/Equipment'
+import ReadXML from '@/Classes/ReadXML'
 
-// optional: put json output into its own folder
-const outputDir = path.resolve('./JSON')
-if (!fs.existsSync(outputDir)) {
-   fs.mkdirSync(outputDir, { recursive: true })
-}
 const startTime = performance.now()
 async function Main() {
-   for (const [nation, fileNameStartsWith] of Object.entries(fileNameStartsWithByNations)) {
+   for (const nation of Object.keys(fileNameStartsWithByNations)) {
       console.log(`The ${nation.toUpperCase()} nation has been started to process`)
+
       const fetchedJSONByNation = await fetchMetaData(nation)
-      // example: XML/germany
-      const nationDir = path.join(xmlDir, nation)
-      //    Create a nation folder for JSON output
-      const outNationDir = path.join(outputDir, nation)
-      if (!fs.existsSync(outNationDir)) {
-         fs.mkdirSync(outNationDir, { recursive: true })
-      }
-
-      const nationXmlFiles = fs
-         .readdirSync(nationDir)
-         .filter((file) => file.toLowerCase().endsWith('.xml'))
-         //   Include all of the nation's vehicles / not list.xml for example
-         .filter((file) => {
-            return file.startsWith(fileNameStartsWith)
-         })
-         // exclude training / special mode vehicles
-         .filter((file) => {
-            const base = path.basename(file, '.xml')
-            return !notToIncludeFileNames.some((bad) => base.includes(bad))
-         })
-
-      if (nationXmlFiles.length === 0) {
-         console.log('No XML files found in', nationDir)
-         process.exit(0)
-      }
+      const readXml = new ReadXML(nation as NationType)
+      const nationXmlFiles = readXml.returnNationXMLFiles()
 
       for (const file of nationXmlFiles) {
-         const filePath = path.join(nationDir, file)
+         const filePath = path.join(readXml.nationSourceXMLDirectory, file)
          const xmlString = fs.readFileSync(filePath, 'utf-8')
          const fileName = path.basename(filePath)
 
@@ -66,35 +44,64 @@ async function Main() {
             fileName,
             withoutSiegeModeBaseName,
             nation,
-            nationDir,
-            fetchedJSONByNation
+            readXml.nationSourceXMLDirectory,
+            fetchedJSONByNation,
          )
-         fs.writeFileSync(`${outNationDir}/${baseName}.json`, JSON.stringify(vehicle, null, 2), 'utf8')
+         fs.writeFileSync(
+            `${readXml.nationOutputJSONDirectory}/${baseName}.json`,
+            JSON.stringify(vehicle, null, 2),
+            'utf8',
+         )
          console.log(`Wrote ${vehicle.name} tank to ${baseName}.json`)
       }
    }
 }
 
-// const BZ79XML = fs.readFileSync('./XML/usa/A187_Ares_75.xml', 'utf-8')
-// const BZ79JSON = xmlParser.parse(BZ79XML)
-// const fileName = path.basename('./XML/usa/A187_Ares_75.xml')
-
-// console.log('FINAL MECHAINCS: ', Mechanics(BZ79JSON[fileName].mechanics, 'A187_Ares_75.xml'))
-
 // Main().then(() => {
 //    const endTime = performance.now()
 //    console.log(
 //       `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(
-//          3
-//       )} seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
+//          3,
+//       )} seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
 //    )
 // })
 
-UploadDB().then(() => {
-   const endTime = performance.now()
-   console.log(
-      `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
-         3
-      )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
-   )
+// UploadDB().then(() => {
+//    const endTime = performance.now()
+//    console.log(
+//       `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
+//          3
+//       )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
+//    )
+// })
+
+async function Equipments() {
+   const equipmentsFromWGAPI = await fetchEquipments()
+   const vehicleEquipmentsXML = fs.readFileSync('./XML/common/equipments/vehicle_equipments.xml', 'utf-8')
+   const vehicleEquipmentsJSON = xmlParser.parse(vehicleEquipmentsXML)['vehicle_equipments.xml'] as any
+   const vehicleEquipments = []
+
+   for (const [equipmentName, equipment] of Object.entries(vehicleEquipmentsJSON) as any) {
+      const foundAPIEquipment = Object.values(equipmentsFromWGAPI).find((e) => e.tag === equipmentName)
+      if (!foundAPIEquipment) return
+
+      const vehicleEquipment = new Equipment(
+         foundAPIEquipment?.provision_id,
+         equipment.icon,
+         Number(equipment.price),
+         foundAPIEquipment?.name,
+         foundAPIEquipment?.description,
+         equipmentName,
+      )
+
+      if (equipment.kpi) {
+         console.log(equipment.kpi?.mul)
+      }
+
+      // console.log(equipment.script)
+   }
+}
+
+Equipments().then(() => {
+   console.log('FINISH')
 })
