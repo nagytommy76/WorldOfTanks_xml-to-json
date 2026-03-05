@@ -1,5 +1,3 @@
-export interface ICrew {
-   primary: string
-   secondary: string[]
-}
-;[]
+import { fileNameStartsWithByNations } from '@Utils/consts'
+
+export type NationType = keyof typeof fileNameStartsWithByNations
