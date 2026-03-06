@@ -77,31 +77,37 @@ async function Main() {
 
 async function Equipments() {
    const equipmentsFromWGAPI = await fetchEquipments()
+   const equipmentsByTag = new Map(Object.values(equipmentsFromWGAPI).map((e) => [e.tag, e]))
+
    const vehicleEquipmentsXML = fs.readFileSync('./XML/common/equipments/vehicle_equipments.xml', 'utf-8')
    const vehicleEquipmentsJSON = xmlParser.parse(vehicleEquipmentsXML)['vehicle_equipments.xml'] as any
    const vehicleEquipments = []
 
    for (const [equipmentName, equipment] of Object.entries(vehicleEquipmentsJSON) as any) {
-      const foundAPIEquipment = Object.values(equipmentsFromWGAPI).find((e) => e.tag === equipmentName)
-      if (!foundAPIEquipment) return
+      if (equipmentName === 'removedRpmLimiter' || equipmentName === 'afterburning') continue
+      const foundAPIEquipment = equipmentsByTag.get(equipmentName)
+      if (!foundAPIEquipment) continue
 
-      const vehicleEquipment = new Equipment(
-         foundAPIEquipment?.provision_id,
-         equipment.icon,
-         Number(equipment.price),
-         foundAPIEquipment?.name,
-         foundAPIEquipment?.description,
-         equipmentName,
-      )
+      const vehicleEquipment = new Equipment({
+         id: foundAPIEquipment?.provision_id,
+         icon: equipment.icon,
+         price: Number(equipment.price),
+         name: foundAPIEquipment?.name,
+         description: foundAPIEquipment?.description,
+      })
 
-      if (equipment.kpi) {
-         console.log(equipment.kpi?.mul)
+      if (equipment.vehicleFilter?.include?.nations) {
+         vehicleEquipment.nationFilter = equipment.vehicleFilter.include.nations
       }
 
-      // console.log(equipment.script)
+      if (equipment.kpi) {
+         vehicleEquipment.setModifiers(equipment.kpi.mul)
+      }
+      vehicleEquipments.push(vehicleEquipment)
    }
+   return vehicleEquipments
 }
 
-Equipments().then(() => {
-   console.log('FINISH')
+Equipments().then((equipments) => {
+   console.log(equipments)
 })
