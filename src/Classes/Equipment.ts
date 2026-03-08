@@ -14,8 +14,8 @@ export default class Equipment extends BaseEquipment {
 
    nationFilter?: string
 
-   constructor({ description, price, icon, id, name }: EquipmentOptions) {
-      super({ icon, id, name })
+   constructor({ description, price, icon, id, name, displayName }: EquipmentOptions) {
+      super({ icon, id, name, displayName })
       this.price = price
       this.description = description
    }
