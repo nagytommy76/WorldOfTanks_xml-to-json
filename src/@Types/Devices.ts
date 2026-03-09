@@ -56,9 +56,10 @@ export interface IKpi {
  * { '#text': 5000, crystal: '' }
  * So we type it to reflect that reality.
  */
-interface IPrice {
+export interface IPrice {
    '#text': number // the actual credit/bond cost
    crystal?: string // empty string if present, signals bond currency
+   equipCoin?: string
 }
 
 // ─── Incompatible Tags ───────────────────────────────────────────────────────

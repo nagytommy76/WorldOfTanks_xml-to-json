@@ -6,12 +6,18 @@ export interface IModifier {
    value: number | string
 }
 
+export interface IAggregateModifier extends IModifier {
+   specValue?: number
+   vehicleTypes?: string[]
+}
+
 export interface EquipmentOptions {
    id: number
    icon: string
    price: number
    name: string
    description: string
+   displayName: string
 }
 
 export interface IEquipment {
