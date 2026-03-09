@@ -1,65 +1,70 @@
-import { readFile } from 'fs/promises'
-import xmlParser from '@Utils/xmlParser'
 import fetchDevices from '@Utils/fetchDevices'
 
-import type { DeluxeDevicesXML } from '@Types/Devices'
+import type { DeluxeDevicesXML, IPrice } from '@Types/Devices'
 
-// import connectDB from '@/Config/connectDB'
+import connectDB from '@/Config/connectDB'
 
-import Devices from '@/Classes/Devices/Devices'
+import UploadSingleDevice from './UploadSingleDevice'
+import parseXMLFile from './ParseXMLFile'
 
-export default async function ReturnDeluxeDevices() {
+type CurrencyType = 'crystal' | 'credits' | 'equipCoin' | 'dynamic'
+
+interface DeviceSource {
+   data: DeluxeDevicesXML
+   currency: CurrencyType // 'dynamic' = determine at runtime like battle boosters
+}
+
+export default async function UploadDevices() {
    try {
+      await connectDB()
       const fetchedDevices = await fetchDevices()
-      const deluxeDevicesMap = new Map(Object.values(fetchedDevices).map((e) => [e.tag, e]))
+      const devicesMap = new Map(Object.values(fetchedDevices).map((e) => [e.tag, e]))
 
-      const deluxeDevicesXML = await readFile('./XML/common/optional_devices/deluxe_devices.xml', 'utf-8')
-      const deluxeDevicesJSON = xmlParser.parse(deluxeDevicesXML)['deluxe_devices.xml'] as DeluxeDevicesXML
+      const [
+         deluxeDevicesJSON,
+         tieredDevicesJSON,
+         bountyDevicesJSON,
+         battleBoostersJSON,
+         modernizedDevicesJSON,
+      ] = await Promise.all([
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/deluxe_devices.xml'),
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/tiers_devices.xml'),
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/trophy_devices.xml'),
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/equipments/battle_boosters.xml'),
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/modernized_devices.xml'),
+      ])
+      const deviceSources: DeviceSource[] = [
+         { data: deluxeDevicesJSON, currency: 'crystal' },
+         { data: tieredDevicesJSON, currency: 'credits' },
+         { data: modernizedDevicesJSON, currency: 'equipCoin' },
+         { data: bountyDevicesJSON, currency: 'credits' },
+         { data: battleBoostersJSON, currency: 'dynamic' },
+      ]
 
-      const deluxeDevices: Devices[] = []
+      for (const source of deviceSources) {
+         for (const [deviceName, device] of Object.entries(source.data)) {
+            const foundAPIDevice = devicesMap.get(deviceName)
+            if (!foundAPIDevice) continue
 
-      for (const [deviceName, device] of Object.entries(deluxeDevicesJSON)) {
-         const foundAPIDevice = deluxeDevicesMap.get(deviceName)
-         if (!foundAPIDevice) continue
-         const vehicleLevel = device.vehicleFilter
+            const currency = returnCurrencyType(source.currency, device.price)
 
-         const DeluxeDevices = new Devices({
-            id: foundAPIDevice.provision_id,
-            icon: device.icon,
-            displayName: foundAPIDevice.name,
-            name: deviceName,
-            price: { crystal: Number(device.price['#text']) },
-            vehicleLevel: {
-               min: Number(vehicleLevel?.include?.vehicle.minLevel) || 0,
-               max: Number(vehicleLevel?.include?.vehicle.maxLevel) || undefined,
-            },
-         })
-
-         DeluxeDevices.setTagsArray(device.tags)
-
-         if (vehicleLevel) {
-            if (vehicleLevel.include) {
-               DeluxeDevices.setVehicleIncludeFilterTags(vehicleLevel.include.vehicle.tags as string)
-            }
-            if (vehicleLevel.exclude) {
-               DeluxeDevices.setVehicleExcludeFilterTags(vehicleLevel.exclude.vehicle.mandatoryTags as string)
-            }
+            await UploadSingleDevice(device, deviceName, foundAPIDevice, currency)
          }
-
-         if (device.kpi.mul) {
-            DeluxeDevices.setModifiers(device.kpi.mul)
-         }
-
-         if (device.kpi.aggregateMul) {
-            DeluxeDevices.setAggregateModifiers(device.kpi.aggregateMul)
-         }
-
-         if (device.incompatibleTags) {
-            DeluxeDevices.setIncompatibleTags(device.incompatibleTags)
-         }
-
-         deluxeDevices.push(DeluxeDevices)
       }
-      return deluxeDevices
-   } catch (error) {}
+   } catch (error) {
+      console.error(error)
+   }
+}
+
+function returnCurrencyType(currencyType: CurrencyType, devicePrice: IPrice) {
+   switch (currencyType) {
+      case 'dynamic':
+         if (devicePrice.crystal !== undefined) {
+            return 'crystal'
+         } else {
+            return 'credits'
+         }
+      default:
+         return currencyType
+   }
 }
