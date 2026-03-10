@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import connectDB from './config/connect.DB'
+import connectDB from '@/Config/connectDB'
 import { VehicleModel } from '@Models/TankModel'
 
 import vehicleDifferences from './VehicleDiff'

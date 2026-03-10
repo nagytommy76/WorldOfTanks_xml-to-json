@@ -11,7 +11,7 @@ export default class BaseEquipment {
    displayName: string
 
    modifiers?: IModifier[]
-   aggregatModifiers?: IAggregateModifier[]
+   aggregateModifiers?: IAggregateModifier[]
 
    constructor({
       icon,
@@ -37,8 +37,8 @@ export default class BaseEquipment {
    }
 
    setAggregateModifiers(aggregateModifiers: IKpiAggregateMul) {
-      this.aggregatModifiers = []
-      this.aggregatModifiers.push(
+      this.aggregateModifiers = []
+      this.aggregateModifiers.push(
          ...aggregateModifiers.mul.map((m) => ({
             name: m.name,
             value: Number(m.value),
