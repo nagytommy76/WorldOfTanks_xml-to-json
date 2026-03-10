@@ -3,17 +3,17 @@ import path from 'path'
 import xmlParser from '@Utils/xmlParser'
 
 import fetchMetaData from '@Utils/fetchMetaData'
-import fetchEquipments from '@Utils/fetchEquipments'
 
 import { fileNameStartsWithByNations } from '@Utils/consts'
 
 import type { NationType } from '@Types/Vehicle'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
-// import UploadDB from './src/UploadDB'
+import UploadDB from './src/UploadDB'
 // import Mechanics from '@VehicleParts/Mechanics/Mechanics'
+// import Equipments from '@/src/VehicleEquipments/GetEquipments'
+import ReturnDeluceDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
 
-import Equipment from '@/src/VehicleEquipments/Equipment'
 import ReadXML from '@/Classes/ReadXML'
 
 const startTime = performance.now()
@@ -70,44 +70,16 @@ async function Main() {
 //    const endTime = performance.now()
 //    console.log(
 //       `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
-//          3
-//       )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`
+//          3,
+//       )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
 //    )
 // })
 
-async function Equipments() {
-   const equipmentsFromWGAPI = await fetchEquipments()
-   const equipmentsByTag = new Map(Object.values(equipmentsFromWGAPI).map((e) => [e.tag, e]))
+// Equipments().then(() => {
+//    console.log('Equipments have been uploaded to DB')
+// })
 
-   const vehicleEquipmentsXML = fs.readFileSync('./XML/common/equipments/vehicle_equipments.xml', 'utf-8')
-   const vehicleEquipmentsJSON = xmlParser.parse(vehicleEquipmentsXML)['vehicle_equipments.xml'] as any
-   const vehicleEquipments = []
-
-   for (const [equipmentName, equipment] of Object.entries(vehicleEquipmentsJSON) as any) {
-      if (equipmentName === 'removedRpmLimiter' || equipmentName === 'afterburning') continue
-      const foundAPIEquipment = equipmentsByTag.get(equipmentName)
-      if (!foundAPIEquipment) continue
-
-      const vehicleEquipment = new Equipment({
-         id: foundAPIEquipment?.provision_id,
-         icon: equipment.icon,
-         price: Number(equipment.price),
-         name: foundAPIEquipment?.name,
-         description: foundAPIEquipment?.description,
-      })
-
-      if (equipment.vehicleFilter?.include?.nations) {
-         vehicleEquipment.nationFilter = equipment.vehicleFilter.include.nations
-      }
-
-      if (equipment.kpi) {
-         vehicleEquipment.setModifiers(equipment.kpi.mul)
-      }
-      vehicleEquipments.push(vehicleEquipment)
-   }
-   return vehicleEquipments
-}
-
-Equipments().then((equipments) => {
-   console.log(equipments)
+ReturnDeluceDevices().then(() => {
+   // fs.writeFileSync(`JSON/common/deluxe_devices.json`, JSON.stringify(devices, null, 2), 'utf8')
+   console.log('Deluxe devices have been uploaded to DB')
 })

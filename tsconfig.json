@@ -29,7 +29,8 @@
          "@Types/*": ["./src/@Types/*"],
          "@XML/*": ["./XML/*"],
          "@Models/*": ["./src/models/*"],
-         "@/Classes/*": ["./src/Classes/*"]
+         "@/Classes/*": ["./src/Classes/*"],
+         "@/Config/*": ["./src/config/*"]
       }
    },
    "include": ["package.json", "**/*", "**/*", ".next/types/**/*", "src/**/*"],
