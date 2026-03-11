@@ -1,6 +1,6 @@
 import fetchDevices from '@Utils/fetchDevices'
 
-import type { DeluxeDevicesXML, IPrice } from '@Types/Devices'
+import type { DeluxeDevicesXML, DeviceTypes, IPrice } from '@Types/Devices'
 
 import connectDB from '@/Config/connectDB'
 
@@ -12,6 +12,7 @@ type CurrencyType = 'crystal' | 'credits' | 'equipCoin' | 'dynamic'
 interface DeviceSource {
    data: DeluxeDevicesXML
    currency: CurrencyType // 'dynamic' = determine at runtime like battle boosters
+   deviceType: DeviceTypes
 }
 
 export default async function UploadDevices() {
@@ -34,11 +35,11 @@ export default async function UploadDevices() {
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/modernized_devices.xml'),
       ])
       const deviceSources: DeviceSource[] = [
-         { data: deluxeDevicesJSON, currency: 'crystal' },
-         { data: tieredDevicesJSON, currency: 'credits' },
-         { data: modernizedDevicesJSON, currency: 'equipCoin' },
-         { data: bountyDevicesJSON, currency: 'credits' },
-         { data: battleBoostersJSON, currency: 'dynamic' },
+         { data: deluxeDevicesJSON, currency: 'crystal', deviceType: 'deluxe' },
+         { data: tieredDevicesJSON, currency: 'credits', deviceType: 'tiers' },
+         { data: modernizedDevicesJSON, currency: 'equipCoin', deviceType: 'modernized' },
+         { data: bountyDevicesJSON, currency: 'credits', deviceType: 'trophy' },
+         { data: battleBoostersJSON, currency: 'dynamic', deviceType: 'boosters' },
       ]
 
       for (const source of deviceSources) {
@@ -48,7 +49,7 @@ export default async function UploadDevices() {
 
             const currency = returnCurrencyType(source.currency, device.price)
 
-            await UploadSingleDevice(device, deviceName, foundAPIDevice, currency)
+            await UploadSingleDevice(device, deviceName, foundAPIDevice, currency, source.deviceType)
          }
       }
    } catch (error) {

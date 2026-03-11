@@ -1,11 +1,16 @@
 import BaseEquipment from '@/Classes/BaseEquipment'
-import { EquipmentOptions } from '@Types/Equipment'
+import type { DeviceTypes } from '@Types/Devices'
+import type { EquipmentOptions } from '@Types/Equipment'
 //https://api.worldoftanks.eu/wot/encyclopedia/provisions/?application_id=fefeeb22948e9ab6ed8c62a09515d476&type=optionalDevice
 export default class Devices extends BaseEquipment {
    /**
     * @param {string} currencyName: crystal: Bond, equipCoin: components
     */
    price: { [currencyName: string]: number }
+   /**
+    * @param {string} deviceType booster, deluxe, modernized, tiers, trophy
+    */
+   deviceType: DeviceTypes
    /**
     * @param {number} vehicleLevel min and max, max is optional ( minLevel: TIER 5, maxLevel: TIER 11 )
     */
@@ -34,15 +39,18 @@ export default class Devices extends BaseEquipment {
       price,
       vehicleLevel,
       displayName,
+      deviceType,
    }: Pick<EquipmentOptions, 'id' | 'icon' | 'name' | 'displayName'> & {
       price: { [currencyName: string]: number }
       vehicleLevel?: { min: number; max?: number }
       displayName: string
+      deviceType: DeviceTypes
    }) {
       super({ icon, id, name, displayName })
       this.price = price
       this.vehicleLevel = vehicleLevel
       this.displayName = displayName
+      this.deviceType = deviceType
    }
 
    private convertStringToStringArray(string: string) {

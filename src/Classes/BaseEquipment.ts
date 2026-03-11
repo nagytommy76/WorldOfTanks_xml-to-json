@@ -32,6 +32,7 @@ export default class BaseEquipment {
          ...normalizedModifier.map((m) => ({
             name: m.name,
             value: Number(m.value),
+            specValue: m.specValue ? Number(m.specValue) : undefined,
          })),
       )
    }

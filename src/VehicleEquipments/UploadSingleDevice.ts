@@ -1,6 +1,6 @@
 import { DeviceModel } from '@Models/DevicesModel'
 
-import type { IDeluxeDevice, IPrice } from '@Types/Devices'
+import type { DeviceTypes, IDeluxeDevice, IPrice } from '@Types/Devices'
 
 import Devices from '@/Classes/Devices/Devices'
 
@@ -22,6 +22,7 @@ export default async function UploadSingleDevice(
       tag: string
    },
    currencyName: 'crystal' | 'credits' | 'equipCoin' = 'crystal',
+   deviceType: DeviceTypes,
 ) {
    const vehicleLevel = device.vehicleFilter
 
@@ -37,6 +38,7 @@ export default async function UploadSingleDevice(
          min: Number(vehicleLevel?.include?.vehicle.minLevel) || 0,
          max: Number(vehicleLevel?.include?.vehicle.maxLevel) || undefined,
       },
+      deviceType,
    })
 
    DeluxeDevices.setTagsArray(device.tags)

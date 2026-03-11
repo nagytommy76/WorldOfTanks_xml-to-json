@@ -4,6 +4,7 @@
 export interface IModifier {
    name: string
    value: number | string
+   specValue?: number
 }
 
 export interface IAggregateModifier extends IModifier {

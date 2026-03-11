@@ -68,6 +68,8 @@ interface IIncompatibleTags {
    installed: string // e.g. "improvedConfiguration"
 }
 
+export type DeviceTypes = 'boosters' | 'deluxe' | 'modernized' | 'tiers' | 'trophy'
+
 // ─── Root Device ─────────────────────────────────────────────────────────────
 
 /**

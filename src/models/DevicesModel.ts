@@ -6,7 +6,15 @@ const DeviceSchema = new Schema({
    name: String,
    displayName: String,
    modifiers: {
-      type: [{ type: { name: String, value: Number } }],
+      type: [
+         {
+            type: {
+               name: String,
+               value: Number,
+               specValue: { type: Number, required: false, default: null },
+            },
+         },
+      ],
       required: false,
       default: null,
       _id: false,
@@ -27,6 +35,7 @@ const DeviceSchema = new Schema({
    vehicleExcludeFilterTags: { type: [String], required: false, default: null },
    incompatibleTags: { type: [String], required: false, default: null },
    tags: { type: [String], required: false, default: null },
+   deviceType: { type: String, required: true },
 })
 
 export const DeviceModel = model('Devices', DeviceSchema)
