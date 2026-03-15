@@ -36,6 +36,7 @@ const DeviceSchema = new Schema({
    incompatibleTags: { type: [String], required: false, default: null },
    tags: { type: [String], required: false, default: null },
    deviceType: { type: String, required: true },
+   archeType: { type: String, required: true },
 })
 
 export const DeviceModel = model('Devices', DeviceSchema)

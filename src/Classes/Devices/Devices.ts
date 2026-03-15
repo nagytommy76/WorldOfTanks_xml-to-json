@@ -31,6 +31,10 @@ export default class Devices extends BaseEquipment {
     * @param {string} tags equipment name | Bounty, Bond or tiered device etc | effect on... firepover
     */
    tags?: string[]
+   /**
+    * @param {string} archeType Group of devices (extraHealthReserve)
+    */
+   archeType: string
 
    constructor({
       icon,
@@ -40,17 +44,20 @@ export default class Devices extends BaseEquipment {
       vehicleLevel,
       displayName,
       deviceType,
+      archeType,
    }: Pick<EquipmentOptions, 'id' | 'icon' | 'name' | 'displayName'> & {
       price: { [currencyName: string]: number }
       vehicleLevel?: { min: number; max?: number }
       displayName: string
       deviceType: DeviceTypes
+      archeType: string
    }) {
       super({ icon, id, name, displayName })
       this.price = price
       this.vehicleLevel = vehicleLevel
       this.displayName = displayName
       this.deviceType = deviceType
+      this.archeType = archeType
    }
 
    private convertStringToStringArray(string: string) {

@@ -26,18 +26,18 @@ export default async function UploadDevices() {
          tieredDevicesJSON,
          bountyDevicesJSON,
          battleBoostersJSON,
-         modernizedDevicesJSON,
+         // modernizedDevicesJSON,
       ] = await Promise.all([
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/deluxe_devices.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/tiers_devices.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/trophy_devices.xml'),
-         parseXMLFile<DeluxeDevicesXML>('./XML/common/equipments/battle_boosters.xml'),
+         // parseXMLFile<DeluxeDevicesXML>('./XML/common/equipments/battle_boosters.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/modernized_devices.xml'),
       ])
       const deviceSources: DeviceSource[] = [
          { data: deluxeDevicesJSON, currency: 'crystal', deviceType: 'deluxe' },
          { data: tieredDevicesJSON, currency: 'credits', deviceType: 'tiers' },
-         { data: modernizedDevicesJSON, currency: 'equipCoin', deviceType: 'modernized' },
+         // { data: modernizedDevicesJSON, currency: 'equipCoin', deviceType: 'modernized' },
          { data: bountyDevicesJSON, currency: 'credits', deviceType: 'trophy' },
          { data: battleBoostersJSON, currency: 'dynamic', deviceType: 'boosters' },
       ]

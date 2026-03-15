@@ -84,6 +84,7 @@ export interface IDeluxeDevice {
    vehicleFilter?: IVehicleFilter
    incompatibleTags: IIncompatibleTags
    kpi: IKpi
+   archetype: string
 }
 
 /**

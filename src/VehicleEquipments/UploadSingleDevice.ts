@@ -39,6 +39,7 @@ export default async function UploadSingleDevice(
          max: Number(vehicleLevel?.include?.vehicle.maxLevel) || undefined,
       },
       deviceType,
+      archeType: device.archetype,
    })
 
    DeluxeDevices.setTagsArray(device.tags)
