@@ -13,6 +13,7 @@ import ReturnOtherData from '@VehicleParts/Other/OtherData'
 import ReturnSiegeMode, { ReturnHydropneumatic } from '@VehicleParts/Other/SiegeMode'
 import MetaData from '@VehicleParts/Other/MetaData'
 import ReturnRocketBoosters from '@VehicleParts/Other/RocketBooster'
+import ReturnSupplyRoles from '@VehicleParts/Roles'
 
 import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 
@@ -48,7 +49,7 @@ export default function ReturnSingleVehicle(
    baseName: string,
    nation: string = 'ussr',
    nationDir: string = 'ussr',
-   fetchedJSONByNation: JSONData
+   fetchedJSONByNation: JSONData,
 ): ITankData {
    const hullData = ReturnHull(convertedRawJSON[fileName])
    const chassisData = ReturnChassis(convertedRawJSON[fileName])
@@ -65,6 +66,7 @@ export default function ReturnSingleVehicle(
    const hydropneumatic = ReturnHydropneumatic(convertedRawJSON[fileName])
    const otherData = ReturnOtherData(fileName, nation)
    const metaData = MetaData(baseName, fetchedJSONByNation)
+   const { supplySlots, customRoleSlotOptions } = ReturnSupplyRoles(convertedRawJSON[fileName])
 
    const rocketBoosters = ReturnRocketBoosters(convertedRawJSON[fileName].rocketAcceleration)
 
@@ -95,6 +97,12 @@ export default function ReturnSingleVehicle(
    }
    if (siegeMode) {
       Vehicle.stats.siegeMode = siegeMode
+   }
+   if (supplySlots) {
+      Vehicle.supplySlotCategory = supplySlots
+   }
+   if (customRoleSlotOptions) {
+      Vehicle.customRoleSlotOptions = customRoleSlotOptions
    }
    return Vehicle
 }
