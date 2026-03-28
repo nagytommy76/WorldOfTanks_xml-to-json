@@ -37,6 +37,7 @@ const DeviceSchema = new Schema({
    tags: { type: [String], required: false, default: null },
    deviceType: { type: String, required: true },
    archeType: { type: String, required: true },
+   categories: { type: [String], required: false, default: null },
 })
 
 export const DeviceModel = model('Devices', DeviceSchema)

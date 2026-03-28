@@ -318,7 +318,6 @@ const VehicleSchema = new Schema<ITankData>({
    type: String,
    tags: [String],
    tier: Number,
-   role: String,
    notInShop: Boolean,
    price: { type: Schema.Types.Mixed, of: [Number, { gold: Number }] },
    xmlId: String,
