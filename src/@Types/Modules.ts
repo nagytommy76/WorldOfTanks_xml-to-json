@@ -351,4 +351,13 @@ export interface ITankData {
    siegeMode: null | Partial<ITankStats>
    stats: ITankStats
    mechanics: any
+   /**
+    * @description FIRST equipment slot category: mobility | stealth | firepower | survivability
+    */
+   supplySlotCategory?: string | null
+   /**
+    * @description SECOND equipment slot category: mobility | stealth | firepower | survivability.
+    * Field modification is reached the 5th level.
+    */
+   customRoleSlotOptions?: string[] | null
 }

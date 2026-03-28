@@ -86,6 +86,7 @@ export interface IDeluxeDevice {
    incompatibleTags: IIncompatibleTags
    kpi: IKpi
    archetype: string
+   categories?: string // only for tiers devices, space-separated list like "firepower mobility stealth survivability"
 }
 
 /**
