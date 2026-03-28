@@ -12,7 +12,7 @@ import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
 import UploadDB from './src/UploadDB'
 // import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 // import Equipments from '@/src/VehicleEquipments/GetEquipments'
-import ReturnDeluceDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
+import ReturnDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
 
 import ReadXML from '@/Classes/ReadXML'
 
@@ -79,7 +79,7 @@ async function Main() {
 //    console.log('Equipments have been uploaded to DB')
 // })
 
-ReturnDeluceDevices().then(() => {
+ReturnDevices().then(() => {
    // fs.writeFileSync(`JSON/common/deluxe_devices.json`, JSON.stringify(devices, null, 2), 'utf8')
    console.log('Deluxe devices have been uploaded to DB')
 })

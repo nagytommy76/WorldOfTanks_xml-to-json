@@ -46,6 +46,7 @@ export interface IKpiAggregateMul {
 export interface IKpi {
    mul?: IKpiMul | IKpiMul[]
    aggregateMul?: IKpiAggregateMul
+   add?: IKpiMul | IKpiMul[]
 }
 
 // ─── Price ───────────────────────────────────────────────────────────────────

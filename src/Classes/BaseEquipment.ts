@@ -27,7 +27,7 @@ export default class BaseEquipment {
 
    setModifiers(modifier: IModifier[] | IModifier) {
       const normalizedModifier = Array.isArray(modifier) ? modifier : [modifier]
-      this.modifiers = []
+      this.modifiers = this.modifiers || []
       this.modifiers.push(
          ...normalizedModifier.map((m) => ({
             name: m.name,
