@@ -10,16 +10,17 @@ import type { NationType } from '@Types/Vehicle'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
 import UploadDB from './src/UploadDB'
-// import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 // import Equipments from '@/src/VehicleEquipments/GetEquipments'
-import ReturnDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
+// import ReturnDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
 
 import ReadXML from '@/Classes/ReadXML'
 
 const startTime = performance.now()
 async function Main() {
    for (const nation of Object.keys(fileNameStartsWithByNations)) {
-      console.log(`The ${nation.toUpperCase()} nation has been started to process`)
+      console.log(
+         `The ${nation.toUpperCase()} nation has been started to process ---------------------------`,
+      )
 
       const fetchedJSONByNation = await fetchMetaData(nation)
       const readXml = new ReadXML(nation as NationType)
@@ -66,20 +67,19 @@ async function Main() {
 //    )
 // })
 
-// UploadDB().then(() => {
-//    const endTime = performance.now()
-//    console.log(
-//       `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
-//          3,
-//       )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
-//    )
-// })
+UploadDB().then(() => {
+   const endTime = performance.now()
+   console.log(
+      `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
+         3,
+      )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
+   )
+})
 
 // Equipments().then(() => {
 //    console.log('Equipments have been uploaded to DB')
 // })
 
-ReturnDevices().then(() => {
-   // fs.writeFileSync(`JSON/common/deluxe_devices.json`, JSON.stringify(devices, null, 2), 'utf8')
-   console.log('Deluxe devices have been uploaded to DB')
-})
+// ReturnDevices().then(() => {
+//    console.log('Deluxe devices have been uploaded to DB')
+// })

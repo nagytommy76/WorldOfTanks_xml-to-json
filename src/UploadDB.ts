@@ -65,6 +65,8 @@ export default async function UploadDB() {
             crew: normalvehicle.crew,
             siegeMode: siegeMode || null,
             mechanics: normalvehicle.mechanics || null,
+            supplySlotCategory: normalvehicle.supplySlotCategory || null,
+            customRoleSlotOptions: normalvehicle.customRoleSlotOptions || null,
 
             stats: {
                camo: normalvehicle.stats.camo,

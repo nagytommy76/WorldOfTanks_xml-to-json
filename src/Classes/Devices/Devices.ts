@@ -35,6 +35,10 @@ export default class Devices extends BaseEquipment {
     * @param {string} archeType Group of devices (extraHealthReserve)
     */
    archeType: string
+   /**
+    * @param {string[]} categories ONLY For TIERS_DEVICES slot (firepower mobility stealth survivability)
+    */
+   categories?: string[]
 
    constructor({
       icon,
@@ -81,5 +85,9 @@ export default class Devices extends BaseEquipment {
    setTagsArray(tags: string) {
       if (!tags) return
       this.tags = this.convertStringToStringArray(tags)
+   }
+   setTiersCategories(categories: string) {
+      const categoriesArray = this.convertStringToStringArray(categories)
+      this.categories = categoriesArray
    }
 }

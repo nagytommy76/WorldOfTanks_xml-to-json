@@ -53,6 +53,10 @@ export default async function UploadSingleDevice(
       }
    }
 
+   if (deviceType === 'tiers' && device.categories) {
+      DeluxeDevices.setTiersCategories(device.categories)
+   }
+
    if (device.kpi?.mul) {
       DeluxeDevices.setModifiers(device.kpi.mul)
    }
