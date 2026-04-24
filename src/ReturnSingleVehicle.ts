@@ -23,6 +23,7 @@ const VEHICLES_WITH_MECHANICS = [
    'J52_STK_2',
    'F135_AS_XX_40_t',
    'F136_AMX_67_Imbattable',
+   'F143_Fauteur',
    'G185_Leopard_120_Verbessert',
    'G187_Taschenratte',
    'G188_LeKpz_Borkenkafer',
@@ -31,6 +32,7 @@ const VEHICLES_WITH_MECHANICS = [
    'S36_Strv_107_12',
    'GB147_FV4025_Contriver',
    'GB152_AT_FV230_Breaker',
+   'GB158_Executor',
    'R228_KR_1',
    'R230_Object_432U',
    'A179_Black_Rock',
@@ -41,6 +43,7 @@ const VEHICLES_WITH_MECHANICS = [
    'A189_Ares_90',
    'A190_Ares_85',
    'A191_Ares_90_C',
+   'A195_Gorilla',
 ]
 
 export default function ReturnSingleVehicle(
