@@ -6,7 +6,7 @@
       "typeRoots": ["./node_modules/@types", "./src/@Types"],
       "target": "esnext",
       "module": "commonjs",
-      "moduleResolution": "node",
+      "moduleResolution": "node16",
       "baseUrl": ".",
       "lib": ["dom", "dom.iterable", "esnext"],
       "allowJs": true,

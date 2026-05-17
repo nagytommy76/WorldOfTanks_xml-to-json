@@ -7,7 +7,7 @@ export type CrewSkillModifier = {
    value: number
 }
 
-type CrewSkillRoles = 'commander' | 'gunner' | 'driver' | 'radioman' | 'loader'
+type CrewSkillRoles = 'commander' | 'gunner' | 'driver' | 'radioman' | 'loader' | 'common'
 
 export default class CrewSkills {
    /**
@@ -25,7 +25,7 @@ export default class CrewSkills {
    /**
     * @param {string} name The name of the crew skill, e.g., "Brothers in Arms". From Wargaming API.
     */
-   public name: string
+   public name: string | null
    /**
     * @param {string} description The description of the crew skill, e.g., "Increases the experience earned by the crew by 5%." From Wargaming API.
     */
@@ -56,7 +56,7 @@ export default class CrewSkills {
    }: {
       xmlName: string
       typeName: CrewSkillsType | undefined
-      name: string
+      name: string | null
       description: string
       modifiers: CrewSkillModifier[]
       role: CrewSkillRoles

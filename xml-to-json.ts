@@ -9,9 +9,10 @@ import { fileNameStartsWithByNations } from '@Utils/consts'
 import type { NationType } from '@Types/Vehicle'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
-import UploadDB from './src/UploadDB'
+// import UploadDB from './src/UploadDB'
 // import Equipments from '@/src/VehicleEquipments/GetEquipments'
 // import ReturnDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
+import UploadCrewSkills from './CrewSkills/UploadCrewSkills'
 
 import ReadXML from '@/Classes/ReadXML'
 
@@ -67,14 +68,14 @@ async function Main() {
 //    )
 // })
 
-UploadDB().then(() => {
-   const endTime = performance.now()
-   console.log(
-      `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
-         3,
-      )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
-   )
-})
+// UploadDB().then(() => {
+//    const endTime = performance.now()
+//    console.log(
+//       `DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
+//          3,
+//       )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
+//    )
+// })
 
 // Equipments().then(() => {
 //    console.log('Equipments have been uploaded to DB')
@@ -83,3 +84,9 @@ UploadDB().then(() => {
 // ReturnDevices().then(() => {
 //    console.log('Deluxe devices have been uploaded to DB')
 // })
+
+UploadCrewSkills()
+   .then(() => {
+      console.log('Crew skills have been uploaded to DB')
+   })
+   .catch((error) => console.error(error))
