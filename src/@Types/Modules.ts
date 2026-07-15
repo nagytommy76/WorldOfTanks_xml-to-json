@@ -31,6 +31,7 @@ export interface IChassis {
    rotatesInPlace: boolean
    rotationSpeed: number
    terrainResistance: number[]
+   effectiveTerrainResistance: number[]
    weight: number
    wheeled: boolean
    wheelAngle: number[] | null
