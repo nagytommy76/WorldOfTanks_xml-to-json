@@ -4,10 +4,10 @@
    },
    "compilerOptions": {
       "typeRoots": ["./node_modules/@types", "./src/@Types"],
+      "types": ["node"],
       "target": "esnext",
-      "module": "commonjs",
+      "module": "nodenext",
       "moduleResolution": "node16",
-      "baseUrl": ".",
       "lib": ["dom", "dom.iterable", "esnext"],
       "allowJs": true,
       "skipLibCheck": true,
