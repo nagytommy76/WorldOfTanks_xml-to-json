@@ -4,14 +4,24 @@ import { IChassis } from '@Types/Modules'
 import ReturnWheelAngles from './WheelAngles'
 import EffectiveTerrain from './EffectiveTerrain'
 
-export function ReturnChassis(rawJSON: any): IChassis[] {
+import ReturnChassisName from './ReturnSuspension'
+
+export async function ReturnChassis(
+   rawJSON: any,
+   tank_id: number | undefined,
+   suspensionIds?: number[],
+): Promise<IChassis[]> {
    const chassis: IChassis[] = [] as IChassis[]
+   let chassisNameMap = undefined
+   if (tank_id && suspensionIds) {
+      chassisNameMap = await ReturnChassisName(tank_id, suspensionIds)
+   }
    if (rawJSON?.chassis) {
       const physicsChassis = rawJSON.physics.detailed.chassis as { [chassisName: string]: any } | undefined
       for (const [key, value] of Object.entries(rawJSON.chassis as Record<string, any>)) {
          const effectiveTerrainResistance = EffectiveTerrain(rawJSON.physics.detailed.chassis, key)
          const wheelAngle = ReturnWheelAngles(physicsChassis, key)
-         const chassisName = key.split('_').slice(1)[1] || key
+         const chassisName = chassisNameMap !== undefined ? chassisNameMap.get(key) : key
 
          chassis.push({
             price: toNumber(value.price) || 0,
@@ -33,7 +43,7 @@ export function ReturnChassis(rawJSON: any): IChassis[] {
                vehicleRotation: toNumber(value.shotDispersionFactors?.vehicleRotation) || 0,
             },
             id: key,
-            name: chassisName,
+            name: chassisName ?? key,
             rotatesInPlace: value.rotationIsAroundCenter === 'true',
             wheeled: wheelAngle != null,
          })
