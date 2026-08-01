@@ -1,5 +1,7 @@
 import type { ITankData, JSONData } from '@Types/Modules'
 
+import fetchModuleNames from '@/src/utils/fetchModuleNames'
+
 import { ReturnHull } from '@VehicleParts/Hull/HullArmor'
 import { ReturnChassis } from '@VehicleParts/Chassis/ReturnChassis'
 import ReturnTurrets from '@VehicleParts/Turrets/Turrets'
@@ -46,29 +48,42 @@ const VEHICLES_WITH_MECHANICS = [
    'A195_Gorilla',
 ]
 
-export default function ReturnSingleVehicle(
+export default async function ReturnSingleVehicle(
    convertedRawJSON: any,
    fileName: string,
    baseName: string,
    nation: string = 'ussr',
    nationDir: string = 'ussr',
    fetchedJSONByNation: JSONData,
-): ITankData {
-   const hullData = ReturnHull(convertedRawJSON[fileName])
-   const chassisData = ReturnChassis(convertedRawJSON[fileName])
-   const turretsData = ReturnTurrets(convertedRawJSON[fileName], nationDir)
+): Promise<ITankData> {
+   const metaData = MetaData(baseName, fetchedJSONByNation)
+   const modules = await fetchModuleNames(metaData?.tank_id?.toString())
+   const tankId = metaData?.tank_id || undefined
 
-   const crew = GetCrewData(convertedRawJSON[fileName])
-   const camo = ReturnCamoValues(convertedRawJSON[fileName])
-   const speedLimits = ReturnSpeedLimits(convertedRawJSON[fileName])
-   const engines = ReturnEngines(convertedRawJSON[fileName], nationDir)
-   const fuelTank = ReturnFuelTanks(convertedRawJSON[fileName], nationDir)
+   const chassisData = await ReturnChassis(
+      convertedRawJSON[fileName],
+      tankId,
+      tankId ? modules[tankId].suspensions : undefined,
+   )
+   const turretsData = await ReturnTurrets(
+      convertedRawJSON[fileName],
+      nationDir,
+      tankId,
+      tankId ? modules[tankId].turrets : undefined,
+      tankId ? modules[tankId].guns : undefined,
+   )
    const radios = ReturnRadios(convertedRawJSON[fileName], nationDir)
+   const engines = ReturnEngines(convertedRawJSON[fileName], nationDir)
+
+   const hullData = ReturnHull(convertedRawJSON[fileName])
+   const fuelTank = ReturnFuelTanks(convertedRawJSON[fileName], nationDir)
+   const speedLimits = ReturnSpeedLimits(convertedRawJSON[fileName])
+   const camo = ReturnCamoValues(convertedRawJSON[fileName])
+   const crew = GetCrewData(convertedRawJSON[fileName])
 
    const siegeMode = ReturnSiegeMode(convertedRawJSON[fileName])
    const hydropneumatic = ReturnHydropneumatic(convertedRawJSON[fileName])
    const otherData = ReturnOtherData(fileName, nation)
-   const metaData = MetaData(baseName, fetchedJSONByNation)
    const { supplySlots, customRoleSlotOptions } = ReturnSupplyRoles(convertedRawJSON[fileName])
 
    const rocketBoosters = ReturnRocketBoosters(convertedRawJSON[fileName].rocketAcceleration)
