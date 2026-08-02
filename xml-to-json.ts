@@ -41,7 +41,7 @@ async function Main() {
             .filter((name) => name !== 'siege' && name !== 'mode')
             .join('_')
 
-         const vehicle = ReturnSingleVehicle(
+         const vehicle = await ReturnSingleVehicle(
             convertedRawJSON,
             fileName,
             withoutSiegeModeBaseName,

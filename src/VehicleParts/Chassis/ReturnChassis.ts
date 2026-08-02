@@ -21,7 +21,6 @@ export async function ReturnChassis(
       for (const [key, value] of Object.entries(rawJSON.chassis as Record<string, any>)) {
          const effectiveTerrainResistance = EffectiveTerrain(rawJSON.physics.detailed.chassis, key)
          const wheelAngle = ReturnWheelAngles(physicsChassis, key)
-         const chassisName = chassisNameMap !== undefined ? chassisNameMap.get(key) : key
 
          chassis.push({
             price: toNumber(value.price) || 0,
@@ -43,7 +42,7 @@ export async function ReturnChassis(
                vehicleRotation: toNumber(value.shotDispersionFactors?.vehicleRotation) || 0,
             },
             id: key,
-            name: chassisName ?? key,
+            name: chassisNameMap?.get(key) ?? key,
             rotatesInPlace: value.rotationIsAroundCenter === 'true',
             wheeled: wheelAngle != null,
          })

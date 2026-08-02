@@ -1,4 +1,4 @@
-import type { JSONData } from '../@Types/Modules'
+import type { JSONData } from '@Types/Modules'
 import 'dotenv/config'
 
 export default async function fetchMetaData(nation: string) {

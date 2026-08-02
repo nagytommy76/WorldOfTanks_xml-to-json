@@ -8,9 +8,9 @@ import ReturnTurrets from '@VehicleParts/Turrets/Turrets'
 import ReturnSpeedLimits from '@VehicleParts/Other/SpeedLimits'
 import ReturnCamoValues from '@VehicleParts/Other/Camo'
 import GetCrewData from '@VehicleParts/Other/Crew'
-import ReturnEngines from '@VehicleParts/Other/Engines'
+import ReturnEngines from '@VehicleParts/Other/Engine/Engines'
 import ReturnFuelTanks from '@VehicleParts/Other/FuelTank'
-import ReturnRadios from '@VehicleParts/Other/Radio'
+import ReturnRadios from '@VehicleParts/Other/Radio/Radio'
 import ReturnOtherData from '@VehicleParts/Other/OtherData'
 import ReturnSiegeMode, { ReturnHydropneumatic } from '@VehicleParts/Other/SiegeMode'
 import MetaData from '@VehicleParts/Other/MetaData'
@@ -63,17 +63,27 @@ export default async function ReturnSingleVehicle(
    const chassisData = await ReturnChassis(
       convertedRawJSON[fileName],
       tankId,
-      tankId ? modules[tankId].suspensions : undefined,
+      tankId && modules ? modules[tankId].suspensions : undefined,
    )
    const turretsData = await ReturnTurrets(
       convertedRawJSON[fileName],
       nationDir,
       tankId,
-      tankId ? modules[tankId].turrets : undefined,
-      tankId ? modules[tankId].guns : undefined,
+      tankId && modules ? modules[tankId].turrets : undefined,
+      tankId && modules ? modules[tankId].guns : undefined,
    )
-   const radios = ReturnRadios(convertedRawJSON[fileName], nationDir)
-   const engines = ReturnEngines(convertedRawJSON[fileName], nationDir)
+   const engines = await ReturnEngines(
+      convertedRawJSON[fileName],
+      nationDir,
+      tankId,
+      tankId && modules ? modules[tankId].engines : undefined,
+   )
+   const radios = await ReturnRadios(
+      convertedRawJSON[fileName],
+      nationDir,
+      tankId,
+      tankId && modules ? modules[tankId].radios : undefined,
+   )
 
    const hullData = ReturnHull(convertedRawJSON[fileName])
    const fuelTank = ReturnFuelTanks(convertedRawJSON[fileName], nationDir)

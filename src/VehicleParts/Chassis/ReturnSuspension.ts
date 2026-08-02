@@ -5,7 +5,7 @@ async function getSuspension(tankId: string, suspensionId: string) {
    )
 
    const JSON = await suspensionResponse.json()
-   return (await JSON).data
+   return await JSON
 }
 
 export default async function ReturnChassisName(tank_id: number, suspensionIds: number[]) {
@@ -13,8 +13,9 @@ export default async function ReturnChassisName(tank_id: number, suspensionIds: 
 
    for (const suspensionId of suspensionIds) {
       const suspension = await getSuspension(tank_id.toString(), suspensionId.toString())
-
-      chassisName.set(suspension[tank_id].suspension.tag, suspension[tank_id].suspension.name)
+      if (suspension.status === 'ok') {
+         chassisName.set(suspension.data[tank_id].suspension.tag, suspension.data[tank_id].suspension.name)
+      }
    }
    return chassisName
 }
