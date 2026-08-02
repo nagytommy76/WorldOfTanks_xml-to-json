@@ -3,6 +3,7 @@ import { ITurrets } from '@Types/Modules'
 
 import ReturnGuns from './Guns'
 import ReturnSecondaryGuns from './Includes/secondaryGuns'
+import ReturnTurretName from './Includes/ReturnTurretNames'
 
 function returnMainArmor(primaryArmor: string, armorArray: { [key: string]: string }): number[] {
    const mainArmor = toStringArray(primaryArmor)
@@ -13,11 +14,21 @@ function returnMainArmor(primaryArmor: string, armorArray: { [key: string]: stri
    return toNumberArray(primaryArmorValues)
 }
 
-export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets[] {
+export default async function ReturnTurrets(
+   rawJSON: any,
+   nationDir: string,
+   tank_id: number | undefined,
+   turretIds?: number[],
+   gunIds?: number[],
+): Promise<ITurrets[]> {
    const turretData: ITurrets[] = []
+   let turretNameMap = undefined
+   if (tank_id && turretIds) {
+      turretNameMap = await ReturnTurretName(tank_id, turretIds)
+   }
    if (rawJSON?.turrets0) {
       for (const [key, value] of Object.entries(rawJSON.turrets0 as Record<string, any>)) {
-         const guns = ReturnGuns(value.guns || [], nationDir)
+         const guns = await ReturnGuns(value.guns || [], nationDir, tank_id, gunIds, turretIds)
          const primaryArmorValues = returnMainArmor(value.primaryArmor as string, value.armor)
          const chassisHealth = toNumber(rawJSON.hull.maxHealth) || 0
          const turretHealt = toNumber(value.maxHealth) || 0
@@ -26,7 +37,7 @@ export default function ReturnTurrets(rawJSON: any, nationDir: string): ITurrets
 
          turretData.push({
             id: key,
-            name: key,
+            name: turretNameMap?.get(key) ?? key,
             armor: primaryArmorValues,
             price: toNumber(value.price) || 0,
             level: toNumber(value.level) || 0,

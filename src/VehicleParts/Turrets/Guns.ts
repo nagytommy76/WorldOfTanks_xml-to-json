@@ -6,9 +6,20 @@ import burstClip from './Includes/burstClip'
 import ShellsData from './Includes/ShellsData'
 import ReturnDualGuns from './Includes/DualGuns'
 import ReturnTwinGun from './Includes/TwinGun'
+import ReturnGunNames from './Includes/ReturnGunNames'
 
-export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
+export default async function ReturnGuns(
+   gun: any,
+   nationDir: string,
+   tank_id: number | undefined,
+   gunIds?: number[],
+   turretIds?: number[],
+): Promise<IGuns[]> {
    const gunsData: IGuns[] = []
+   let GunNameMap = undefined
+   if (tank_id && gunIds && turretIds) {
+      GunNameMap = await ReturnGunNames(tank_id, gunIds, turretIds)
+   }
 
    for (const [key, value] of Object.entries(gun as Record<string, any>)) {
       const { burst, clip } = burstClip(value)
@@ -46,7 +57,7 @@ export default function ReturnGuns(gun: any, nationDir: string): IGuns[] {
          },
          gunArc: toNumberArray(value.turretYawLimits || []),
          id: key,
-         name: key,
+         name: GunNameMap?.get(key) ?? key,
          reloadTime: toNumber(value.reloadTime) || 0,
          invisibilityFactorAtShot: toNumber(value.invisibilityFactorAtShot) || 0,
          twinGun: Object.keys(twinGun).length > 0 ? twinGun : null,
