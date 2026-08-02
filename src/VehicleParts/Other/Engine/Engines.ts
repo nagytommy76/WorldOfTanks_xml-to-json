@@ -3,9 +3,19 @@ import convertedJSON from '@Utils/convertedJson'
 
 import { IEngines } from '@Types/Modules'
 
-export default function ReturnEngines(rawJson: any, nationDir: string): IEngines[] {
-   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'engines')
+import ReturnEngineName from './ReturnEngineNames'
 
+export default async function ReturnEngines(
+   rawJson: any,
+   nationDir: string,
+   tank_id: number | undefined,
+   engineIds?: number[],
+): Promise<IEngines[]> {
+   const { convertedComponentJSON, fileName } = convertedJSON(nationDir, 'engines')
+   let engineNameMap = undefined
+   if (tank_id && engineIds) {
+      engineNameMap = await ReturnEngineName(tank_id, engineIds)
+   }
    const enginesArray: IEngines[] = []
    const vehicleEngines = rawJson.engines
    if (convertedComponentJSON[fileName] && vehicleEngines) {
@@ -18,7 +28,7 @@ export default function ReturnEngines(rawJson: any, nationDir: string): IEngines
             level: toNumber(engine.level) || 0,
             maxHealth: toNumber(engine.maxHealth) || 0,
             maxRegenHealth: toNumber(engine.maxRegenHealth) || 0,
-            name: engineName,
+            name: engineNameMap?.get(engineName) ?? engineName,
             power: toNumber(detailedEngines[engineName].smplEnginePower) || toNumber(engine.power) || 0,
             price: toNumber(engine.price) || 0,
             realPower: toNumber(engine.realPower) || 0,
