@@ -4,7 +4,7 @@ import type { DeluxeDevicesXML, DeviceTypes, IPrice } from '@Types/Devices'
 
 import connectDB from '@/Config/connectDB'
 
-import UploadSingleDevice from './UploadSingleDevice'
+// import UploadSingleDevice from './UploadSingleDevice'
 import parseXMLFile from './ParseXMLFile'
 
 type CurrencyType = 'crystal' | 'credits' | 'equipCoin' | 'dynamic'
@@ -25,13 +25,13 @@ export default async function UploadDevices() {
          deluxeDevicesJSON,
          tieredDevicesJSON,
          bountyDevicesJSON,
-         // battleBoostersJSON,
+         battleBoostersJSON,
          modernizedDevicesJSON,
       ] = await Promise.all([
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/deluxe_devices.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/tiers_devices.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/trophy_devices.xml'),
-         // parseXMLFile<DeluxeDevicesXML>('./XML/common/equipments/battle_boosters.xml'),
+         parseXMLFile<DeluxeDevicesXML>('./XML/common/equipments/battle_boosters.xml'),
          parseXMLFile<DeluxeDevicesXML>('./XML/common/optional_devices/modernized_devices.xml'),
       ])
       const deviceSources: DeviceSource[] = [
@@ -39,7 +39,7 @@ export default async function UploadDevices() {
          { data: tieredDevicesJSON, currency: 'credits', deviceType: 'tiers' },
          { data: modernizedDevicesJSON, currency: 'equipCoin', deviceType: 'modernized' },
          { data: bountyDevicesJSON, currency: 'credits', deviceType: 'trophy' },
-         // { data: battleBoostersJSON, currency: 'dynamic', deviceType: 'boosters' },
+         { data: battleBoostersJSON, currency: 'dynamic', deviceType: 'boosters' },
       ]
 
       for (const source of deviceSources) {
@@ -49,7 +49,8 @@ export default async function UploadDevices() {
 
             const currency = returnCurrencyType(source.currency, device.price)
 
-            await UploadSingleDevice(device, deviceName, foundAPIDevice, currency, source.deviceType)
+            console.log('BATTLE BOOSTERS DEVICE::: ', device, 'API: ', foundAPIDevice)
+            // await UploadSingleDevice(device, deviceName, foundAPIDevice, currency, source.deviceType)
          }
       }
    } catch (error) {
