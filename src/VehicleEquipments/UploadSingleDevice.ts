@@ -39,7 +39,7 @@ export default async function UploadSingleDevice(
          max: Number(vehicleLevel?.include?.vehicle.maxLevel) || undefined,
       },
       deviceType,
-      archeType: device.archetype,
+      archeType: device.archetype || device.type,
    })
 
    DeluxeDevices.setTagsArray(device.tags)
@@ -71,6 +71,10 @@ export default async function UploadSingleDevice(
 
    if (device.incompatibleTags) {
       DeluxeDevices.setIncompatibleTags(device.incompatibleTags)
+   }
+   if (device.script?.weight) {
+      const weight = Number(device.script.weight)
+      DeluxeDevices.setWeight(weight)
    }
 
    const deluxeDeviceModel = new DeviceModel(DeluxeDevices)

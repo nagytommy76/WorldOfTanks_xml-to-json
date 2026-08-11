@@ -4,7 +4,7 @@ import type { DeluxeDevicesXML, DeviceTypes, IPrice } from '@Types/Devices'
 
 import connectDB from '@/Config/connectDB'
 
-// import UploadSingleDevice from './UploadSingleDevice'
+import UploadSingleDevice from './UploadSingleDevice'
 import parseXMLFile from './ParseXMLFile'
 
 type CurrencyType = 'crystal' | 'credits' | 'equipCoin' | 'dynamic'
@@ -49,8 +49,7 @@ export default async function UploadDevices() {
 
             const currency = returnCurrencyType(source.currency, device.price)
 
-            console.log('BATTLE BOOSTERS DEVICE::: ', device, 'API: ', foundAPIDevice)
-            // await UploadSingleDevice(device, deviceName, foundAPIDevice, currency, source.deviceType)
+            await UploadSingleDevice(device, deviceName, foundAPIDevice, currency, source.deviceType)
          }
       }
    } catch (error) {
