@@ -39,6 +39,10 @@ export default class Devices extends BaseEquipment {
     * @param {string[]} categories ONLY For TIERS_DEVICES slot (firepower mobility stealth survivability)
     */
    categories?: string[]
+   /**
+    * @param weight weight of device in kg
+    */
+   weight?: number
 
    constructor({
       icon,
@@ -89,5 +93,8 @@ export default class Devices extends BaseEquipment {
    setTiersCategories(categories: string) {
       const categoriesArray = this.convertStringToStringArray(categories)
       this.categories = categoriesArray
+   }
+   setWeight(weight: number) {
+      this.weight = weight
    }
 }

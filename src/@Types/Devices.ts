@@ -87,6 +87,8 @@ export interface IDeluxeDevice {
    kpi: IKpi
    archetype: string
    categories?: string // only for tiers devices, space-separated list like "firepower mobility stealth survivability"
+   script: any
+   type: string // e.g. battleBoosters
 }
 
 /**
