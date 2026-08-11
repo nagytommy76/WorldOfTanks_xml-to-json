@@ -38,6 +38,7 @@ const DeviceSchema = new Schema({
    deviceType: { type: String, required: true },
    archeType: { type: String, required: true },
    categories: { type: [String], required: false, default: null },
+   weight: { type: Number, required: false, default: null },
 })
 
 export const DeviceModel = model('Devices', DeviceSchema)
