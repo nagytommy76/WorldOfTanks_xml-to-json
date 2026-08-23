@@ -39,6 +39,36 @@ export interface IKpiAggregateMul {
 }
 
 /**
+ * @param boostSkill boosts the skill to 100%
+ * @param mul multiplies the 100% trained skill
+ * @example
+ * smoothDrivingBattleBooster
+ *   <kpi>
+      <oneOf>
+        <boostSkill>
+          <name>	crewSkillSmoothRiding	</name>
+          <value>	1	</value>
+        </boostSkill>
+        <mul>
+          <name>	crewSkillSmoothRiding	</name>
+          <value>	2	</value>
+        </mul>
+      </oneOf>
+    </kpi>
+    // doubles the smooth turret perk effectiveness *2
+ */
+export interface IOneOf {
+   boostSkill: {
+      name: string
+      value: number
+   }
+   mul: {
+      name: string
+      value: number
+   }
+}
+
+/**
  * kpi can have flat mul entries, aggregate entries, or both.
  * Both are typed as single-or-array because fast-xml-parser collapses
  * single-child arrays into plain objects.
@@ -47,6 +77,7 @@ export interface IKpi {
    mul?: IKpiMul | IKpiMul[]
    aggregateMul?: IKpiAggregateMul
    add?: IKpiMul | IKpiMul[]
+   oneOf?: IOneOf
 }
 
 // ─── Price ───────────────────────────────────────────────────────────────────
