@@ -5,6 +5,16 @@ const DeviceSchema = new Schema({
    icon: String,
    name: String,
    displayName: String,
+   crewSkillModifier: {
+      boostSkill: {
+         name: String,
+         value: Number,
+      },
+      mul: {
+         name: String,
+         value: Number,
+      },
+   },
    modifiers: {
       type: [
          {
@@ -20,7 +30,16 @@ const DeviceSchema = new Schema({
       _id: false,
    },
    aggregateModifiers: {
-      type: [{ type: { name: String, value: Number, vehicleTypes: [String] } }],
+      type: [
+         {
+            type: {
+               name: String,
+               value: Number,
+               specValue: { type: Number, required: false, default: null },
+               vehicleTypes: [String],
+            },
+         },
+      ],
       required: false,
       default: null,
       _id: false,
