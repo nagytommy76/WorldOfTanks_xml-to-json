@@ -69,6 +69,10 @@ export default async function UploadSingleDevice(
       DeluxeDevices.setModifiers(device.kpi.add)
    }
 
+   if (device.kpi?.oneOf) {
+      DeluxeDevices.setOneOfKpi(device.kpi.oneOf)
+   }
+
    if (device.incompatibleTags) {
       DeluxeDevices.setIncompatibleTags(device.incompatibleTags)
    }

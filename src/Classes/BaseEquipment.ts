@@ -1,5 +1,5 @@
 import type { EquipmentOptions, IModifier, IAggregateModifier } from '@Types/Equipment'
-import type { IKpiAggregateMul } from '@Types/Devices'
+import type { IKpiAggregateMul, IOneOf } from '@Types/Devices'
 
 export default class BaseEquipment {
    id: number
@@ -12,6 +12,7 @@ export default class BaseEquipment {
 
    modifiers?: IModifier[]
    aggregateModifiers?: IAggregateModifier[]
+   crewSkillModifier?: IOneOf
 
    constructor({
       icon,
@@ -47,5 +48,12 @@ export default class BaseEquipment {
             vehicleTypes: m.vehicleTypes ? m.vehicleTypes.split(' ') : undefined,
          })),
       )
+   }
+
+   setOneOfKpi(oneOf: IOneOf) {
+      this.crewSkillModifier = {
+         boostSkill: { name: oneOf.boostSkill.name, value: Number(oneOf.boostSkill.value) },
+         mul: { name: oneOf.mul.name, value: Number(oneOf.mul.value) },
+      }
    }
 }
