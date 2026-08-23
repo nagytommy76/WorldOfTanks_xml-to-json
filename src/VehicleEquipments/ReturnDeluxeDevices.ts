@@ -45,7 +45,12 @@ export default async function UploadDevices() {
       for (const source of deviceSources) {
          for (const [deviceName, device] of Object.entries(source.data)) {
             const foundAPIDevice = devicesMap.get(deviceName)
-            if (!foundAPIDevice) continue
+            if (
+               !foundAPIDevice ||
+               deviceName === 'sixthSenseBattleBooster' ||
+               deviceName === 'lastEffortBattleBooster'
+            )
+               continue
 
             const currency = returnCurrencyType(source.currency, device.price)
 
