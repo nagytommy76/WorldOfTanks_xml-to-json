@@ -10,16 +10,17 @@ export default function returnSecondaryGuns(secondaryGuns: any, nationDir: strin
 
    const { convertedComponentJSON: convertedGunJSON, fileName: gunFileName } = convertedJSON(
       nationDir,
-      'guns'
+      'guns',
    )
    const { convertedComponentJSON: convertedShellsJSON, fileName: shellsFileName } = convertedJSON(
       nationDir,
-      'shells'
+      'shells',
    )
    if (convertedGunJSON[gunFileName] && convertedShellsJSON[shellsFileName]) {
       const rawGuns = convertedGunJSON[gunFileName]
       const rawShells = convertedShellsJSON[shellsFileName]
       // Taschenratte turret -> secondaryGuns -> _8_cm_8H62_2
+      // Japan J53_Ho_Ri_Shugo  _12_cm_Shisei_Funshinhou
       // console.log('GUNS: ', secondaryGuns)
       const secondGuns = Object.entries(secondaryGuns as Record<string, ISecondaryGuns>).map(
          ([key, value]) => {
@@ -27,8 +28,8 @@ export default function returnSecondaryGuns(secondaryGuns: any, nationDir: strin
                name: key,
                reloadTime: toNumber(value.reloadTime),
                burst: {
-                  count: toNumber(value.burst.count),
-                  rate: toNumber(value.burst.rate),
+                  count: toNumber(value.burst?.count),
+                  rate: toNumber(value.burst?.rate),
                },
                aimingTime: toNumber(value.aimingTime),
                shotDispersionRadius: toNumber(value.shotDispersionRadius),
@@ -60,7 +61,7 @@ export default function returnSecondaryGuns(secondaryGuns: any, nationDir: strin
             data['shells'] = [shells]
 
             return data
-         }
+         },
       )
       return secondGuns
    }

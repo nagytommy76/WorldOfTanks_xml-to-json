@@ -22,6 +22,7 @@ import Mechanics from '@VehicleParts/Mechanics/Mechanics'
 const VEHICLES_WITH_MECHANICS = [
    'Ch67_BZ_79',
    'Ch70_PTZ_78',
+   'Ch71_WZ_219',
    'J52_STK_2',
    'F135_AS_XX_40_t',
    'F136_AMX_67_Imbattable',
@@ -30,8 +31,14 @@ const VEHICLES_WITH_MECHANICS = [
    'G187_Taschenratte',
    'G188_LeKpz_Borkenkafer',
    'G189_Hirschkafer',
+   'G193_Pz_Kpfw_55',
+   'G195_HWK_40',
+   'G196_Versuchspanzer_57',
+   'G197_Pz_Kpfw_Neu',
+   'G198_Kampfpanzer_67',
    'Pl37_CS_67_Szakal',
    'S36_Strv_107_12',
+   'S41_BV_111',
    'GB147_FV4025_Contriver',
    'GB152_AT_FV230_Breaker',
    'GB158_Executor',
@@ -46,6 +53,9 @@ const VEHICLES_WITH_MECHANICS = [
    'A190_Ares_85',
    'A191_Ares_90_C',
    'A195_Gorilla',
+   'J53_Ho_Ri_Shugo',
+   'Cz46_Vz_63P',
+   'It43_CAV_mod_71',
 ]
 
 export default async function ReturnSingleVehicle(
