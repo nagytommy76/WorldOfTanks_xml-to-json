@@ -1,4 +1,4 @@
-import mongoose, { Document, Model, Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import type {
    IModifierOp,
    IFieldModification,

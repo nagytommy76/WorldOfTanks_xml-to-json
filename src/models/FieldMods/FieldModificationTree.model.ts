@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import type { ITierRange, IStepAction, TStepActionType, ITreeStep, IFieldModificationTree } from './TreeTypes'
 
 const tierRangeSchema = new Schema<ITierRange>(
