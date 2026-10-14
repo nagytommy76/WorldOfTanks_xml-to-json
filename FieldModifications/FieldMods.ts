@@ -23,18 +23,30 @@ type XMLFieldMods = {
    [roleName: string]: IFieldModXML
 }
 
+async function ReturnFieldModifications() {
+   const FieldMods: { [roleName: string]: any } = {}
+   const fieldModsXML = await parseXMLFile<XMLFieldMods>(
+      './XML/common/post_progression/field_modifications.xml',
+   )
+   for (const [roleName, modification] of Object.entries(fieldModsXML)) {
+      const roleNameArray = roleName.split('_')
+      console.log('ROLE NAME ARRAY: ', roleNameArray, 'HAS BASE: ', roleNameArray.includes('base'))
+   }
+   return FieldMods
+}
+
 export default async function FieldModifications() {
-   await connectDB()
+   // await connectDB()
    try {
-      const fieldModsXML = await parseXMLFile<XMLFieldMods>(
-         './XML/common/post_progression/field_modifications.xml',
-      )
+      // const fieldModsXML = await parseXMLFile<XMLFieldMods>(
+      //    './XML/common/post_progression/field_modifications.xml',
+      // )
       const fieldModsTreeXML = await parseXMLFile(
          './XML/common/post_progression/field_modifications_trees.xml',
       )
 
-      for (const [roleName, modification] of Object.entries(fieldModsXML)) {
-      }
+      const fieldModifications = await ReturnFieldModifications()
+      console.log('FieldMODS: ', fieldModifications)
    } catch (error) {
       console.error(error)
    }

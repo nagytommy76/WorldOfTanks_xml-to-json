@@ -9,10 +9,11 @@ import { fileNameStartsWithByNations } from '@Utils/consts'
 import type { NationType } from '@Types/Vehicle'
 
 import ReturnSingleVehicle from '@/src/ReturnSingleVehicle'
-import UploadDB from './src/UploadDB'
+// import UploadDB from './src/UploadDB'
 // import Equipments from '@/src/VehicleEquipments/GetEquipments'
 // import ReturnDevices from '@/src/VehicleEquipments/ReturnDeluxeDevices'
 // import UploadCrewSkills from './CrewSkills/UploadCrewSkills'
+import FieldMods from './FieldModifications/FieldMods'
 
 import ReadXML from '@/Classes/ReadXML'
 
@@ -59,13 +60,17 @@ async function Main() {
    }
 }
 
-Main().then(() => {
-   const endTime = performance.now()
-   console.log(
-      `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(
-         3,
-      )} seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
-   )
+// Main().then(() => {
+//    const endTime = performance.now()
+//    console.log(
+//       `The XML -> JSON conversion has been ended in: ${((endTime - startTime) / 1000).toFixed(
+//          3,
+//       )} seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
+//    )
+// })
+
+FieldMods().then(() => {
+   console.log('END.....................')
 })
 
 // UploadDB().then(() => {
