@@ -1,52 +1,65 @@
-import {
-   BaseModification,
-   FieldModification,
-   PairModification,
-} from '@Models/FieldMods/FieldModification.model'
+import { BaseModification, PairModification } from '@Models/FieldMods/FieldModification.model'
+import { FieldModificationTree } from '@Models/FieldMods/FieldModificationTree.model'
 
 import connectDB from '@/Config/connectDB'
-
-import parseXMLFile from '@/src/VehicleEquipments/ParseXMLFile'
-
-interface MulModifier {
-   name: string
-   value: number
-}
-interface IFieldModXML {
-   id: number
-   locName: string
-   modifiers: MulModifier[]
-   kpi: MulModifier[]
-}
-
-type XMLFieldMods = {
-   [roleName: string]: IFieldModXML
-}
-
-async function ReturnFieldModifications() {
-   const FieldMods: { [roleName: string]: any } = {}
-   const fieldModsXML = await parseXMLFile<XMLFieldMods>(
-      './XML/common/post_progression/field_modifications.xml',
-   )
-   for (const [roleName, modification] of Object.entries(fieldModsXML)) {
-      const roleNameArray = roleName.split('_')
-      console.log('ROLE NAME ARRAY: ', roleNameArray, 'HAS BASE: ', roleNameArray.includes('base'))
-   }
-   return FieldMods
-}
+import ReturnFieldModifications from './ReturnFieldMods.helper'
+import ReturnTrees from './FieldModTrees.helper'
 
 export default async function FieldModifications() {
-   // await connectDB()
+   await connectDB()
    try {
-      // const fieldModsXML = await parseXMLFile<XMLFieldMods>(
-      //    './XML/common/post_progression/field_modifications.xml',
-      // )
-      const fieldModsTreeXML = await parseXMLFile(
-         './XML/common/post_progression/field_modifications_trees.xml',
+      const { BaseFieldMods, PairFieldMods } = await ReturnFieldModifications()
+      const FieldModTrees = await ReturnTrees()
+
+      console.log(`   Found ${BaseFieldMods.length} base mods, ${PairFieldMods.length} pairs`)
+
+      const baseOps = BaseFieldMods.map((base) => ({
+         updateOne: {
+            filter: { key: base.key },
+            update: { $set: base },
+            upsert: true,
+         },
+      }))
+
+      const baseResult = await BaseModification.bulkWrite(baseOps, {
+         ordered: false,
+      })
+
+      console.log(
+         `   ✅ Bases  → inserted: ${baseResult.upsertedCount}, updated: ${baseResult.modifiedCount}`,
       )
 
-      const fieldModifications = await ReturnFieldModifications()
-      console.log('FieldMODS: ', fieldModifications)
+      const pairOps = PairFieldMods.map((pair) => ({
+         updateOne: {
+            filter: { key: pair.key },
+            update: { $set: pair },
+            upsert: true,
+         },
+      }))
+
+      const pairResult = await PairModification.bulkWrite(pairOps, {
+         ordered: false,
+      })
+
+      console.log(
+         `   ✅ Pairs  → inserted: ${pairResult.upsertedCount}, updated: ${pairResult.modifiedCount}`,
+      )
+
+      const treeOps = FieldModTrees.map((tree) => ({
+         updateOne: {
+            filter: { role: tree.role }, // role is the stable join key
+            update: { $set: tree },
+            upsert: true,
+         },
+      }))
+
+      const treeResult = await FieldModificationTree.bulkWrite(treeOps, {
+         ordered: false,
+      })
+
+      console.log(
+         `   ✅ Trees  → inserted: ${treeResult.upsertedCount}, updated: ${treeResult.modifiedCount}`,
+      )
    } catch (error) {
       console.error(error)
    }
