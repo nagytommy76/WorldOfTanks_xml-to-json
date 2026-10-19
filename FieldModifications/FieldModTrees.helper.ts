@@ -31,8 +31,8 @@ function parseUnlocks(raw: number | string | undefined): number[] {
  * The XML nests this 3 levels deep but there is only ever one block,
  * so we flatten it immediately rather than mirroring the nesting in the DB.
  */
-function parseTierRange(vf: RawVehicleFilter | undefined): ITierRange | null {
-   const vehicle = vf?.include?.vehicle
+function parseTierRange(vehicleFilter: RawVehicleFilter | undefined): ITierRange | null {
+   const vehicle = vehicleFilter?.include?.vehicle
    if (!vehicle) return null
 
    return {
