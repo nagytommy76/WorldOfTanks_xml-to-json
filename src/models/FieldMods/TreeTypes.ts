@@ -61,3 +61,10 @@ export interface IFieldModificationTree extends Document {
    rootStep: number
    steps: ITreeStep[]
 }
+
+export interface FieldModificationTreeInput {
+   role: string
+   xmlId: number
+   rootStep: number
+   steps: ITreeStep[]
+}
