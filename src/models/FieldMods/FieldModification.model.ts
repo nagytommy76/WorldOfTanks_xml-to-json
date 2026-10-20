@@ -66,6 +66,7 @@ const pairOptionSchema = new Schema<IPairOption>(
    {
       xmlId: { type: Number, required: true },
       imgName: { type: String, required: true },
+      displayName: { type: String, required: true },
       modifiers: { type: [modifierOpSchema], required: true },
       kpi: { type: [modifierOpSchema], required: true },
    },

@@ -46,6 +46,7 @@ export interface IPairOption {
    xmlId: number
    /** Icon key used in the game UI, e.g. "additionalGrousers" */
    imgName: string
+   displayName: string
    modifiers: IModifierOp[]
    kpi: IModifierOp[]
 }
@@ -65,3 +66,24 @@ export interface IPairModification extends Document {
 
 // Union type: what a resolved modification document looks like
 export type IFieldModification = IBaseModification | IPairModification
+
+export interface BaseModificationInput {
+   key: string
+   xmlId: number
+   locName: string
+   modifiers: IModifierOp[]
+   kpi: IModifierOp[]
+}
+
+export interface PairOptionInput {
+   xmlId: number
+   imgName: string
+   displayName: string
+   modifiers: IModifierOp[]
+   kpi: IModifierOp[]
+}
+
+export interface PairModificationInput {
+   key: string // the PREFIX: "role_heavyTank_pair_1" (not _1 / _2)
+   options: [PairOptionInput, PairOptionInput] // always exactly 2
+}
