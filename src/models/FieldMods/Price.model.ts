@@ -4,7 +4,7 @@ import { ITierPrice, IFieldModificationPrice, PRICE_CURRENCIES } from './price.t
 // Sub-schema: never queried on its own, so no _id per entry
 const tierPriceSchema = new Schema<ITierPrice>(
    {
-      tier: { type: Number, required: true, min: 1, max: 11 }, // level_11 exists in the XML
+      tier: { type: Number, required: true, min: 6, max: 11 }, // level_11 exists in the XML
       amount: { type: Number, required: true, min: 0 }, // 0 is valid (unlockPairModificationCost)
       currency: { type: String, required: true, enum: PRICE_CURRENCIES },
    },
