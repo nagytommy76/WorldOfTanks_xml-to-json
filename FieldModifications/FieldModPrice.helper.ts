@@ -64,12 +64,10 @@ export default async function FieldModPrice() {
       './XML/common/post_progression/prices.xml',
    )
 
-   const convertedPrices = Object.entries(priceXML).map(([priceKey, tierNodes]) => ({
+   return Object.entries(priceXML).map(([priceKey, tierNodes]) => ({
       key: priceKey,
       prices: Object.entries(tierNodes)
          .map(([tierTag, rawTierPrice]) => parseTierPrice(priceKey, tierTag, rawTierPrice))
          .sort((first, second) => first.tier - second.tier), // stable order in the DB
    }))
-
-   console.log('CONVERTED PRICES: ', convertedPrices[5].prices)
 }
