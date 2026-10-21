@@ -7,6 +7,7 @@ import {
 } from '@Models/FieldMods/FieldModificationTypes'
 import type { XMLFieldMods } from './FieldMod.types'
 import parseKpiModifiers from './parseModifiers.helper'
+import FieldModNames from './FieldModNames'
 
 export default async function ReturnFieldModifications() {
    const BaseFieldMods: BaseModificationInput[] = []
@@ -26,8 +27,11 @@ export default async function ReturnFieldModifications() {
          })
       } else if (roleNameArray.includes('pair')) {
          const prefix = roleName.replace(/_[12]$/, '')
+         const ingameName = FieldModNames[prefix][modification.imgName as string]
+
          const option: PairOptionInput = {
             xmlId: Number(modification.id),
+            displayName: ingameName,
             imgName: String(modification.imgName ?? '').trim(),
             modifiers: parseKpiModifiers(modification.modifiers),
             kpi: parseKpiModifiers(modification.kpi),

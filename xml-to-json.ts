@@ -70,7 +70,12 @@ async function Main() {
 // })
 
 FieldMods().then(() => {
-   console.log('END.....................')
+   const endTime = performance.now()
+   console.log(
+      `Field Modification DB upload process has been ended in: ${((endTime - startTime) / 1000).toFixed(
+         3,
+      )} seconds seconds, and ${((endTime - startTime) / 1000 / 60).toFixed(3)} minutes`,
+   )
 })
 
 // UploadDB().then(() => {

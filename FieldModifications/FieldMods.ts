@@ -1,15 +1,18 @@
 import { BaseModification, PairModification } from '@Models/FieldMods/FieldModification.model'
 import { FieldModificationTree } from '@Models/FieldMods/FieldModificationTree.model'
+import { FieldModificationPrice } from '@Models/FieldMods/Price.model'
 
 import connectDB from '@/Config/connectDB'
 import ReturnFieldModifications from './ReturnFieldMods.helper'
 import ReturnTrees from './FieldModTrees.helper'
+import FieldModPrice from './FieldModPrice.helper'
 
 export default async function FieldModifications() {
    await connectDB()
    try {
       const { BaseFieldMods, PairFieldMods } = await ReturnFieldModifications()
       const FieldModTrees = await ReturnTrees()
+      const FieldModPrices = await FieldModPrice()
 
       console.log(`   Found ${BaseFieldMods.length} base mods, ${PairFieldMods.length} pairs`)
 
@@ -59,6 +62,19 @@ export default async function FieldModifications() {
 
       console.log(
          `   ✅ Trees  → inserted: ${treeResult.upsertedCount}, updated: ${treeResult.modifiedCount}`,
+      )
+
+      const priceOps = FieldModPrices.map((priceInput) => ({
+         updateOne: {
+            filter: { key: priceInput.key },
+            update: { $set: priceInput },
+            upsert: true,
+         },
+      }))
+
+      const priceResult = await FieldModificationPrice.bulkWrite(priceOps, { ordered: false })
+      console.log(
+         `   ✅ Prices → inserted: ${priceResult.upsertedCount}, updated: ${priceResult.modifiedCount}`,
       )
    } catch (error) {
       console.error(error)

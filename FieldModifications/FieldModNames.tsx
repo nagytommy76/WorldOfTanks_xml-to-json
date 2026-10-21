@@ -1,4 +1,4 @@
-const PairFieldModNames: {
+const FieldModNames: {
    [xmlRoleName: string]: {
       [imgName: string]: string
    }
@@ -233,4 +233,4 @@ const PairFieldModNames: {
    },
 }
 
-export default PairFieldModNames
+export default FieldModNames
